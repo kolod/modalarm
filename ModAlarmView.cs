@@ -57,8 +57,7 @@ namespace Scada.Server.Modules
         /// </summary>
         public override void ShowProps()
         {
-            FrmAlarmConfig frmAbout = new FrmAlarmConfig();
-            frmAbout.ShowDialog();
+            FrmAlarmConfig.ShowDialog(AppDirs, ServerComm);
         }
     }
 }

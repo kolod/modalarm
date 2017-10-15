@@ -42,19 +42,19 @@ namespace Scada.Server.Modules
         /// <summary>
         /// Имя аудиофайла
         /// </summary>
-        private string SoundFileName = "ModDBExport.xml";
+        public string SoundFileName = "";
 
 
         /// <summary>
         /// Имя аудиофайла
         /// </summary>
-        private int ChanelNumber = -1;
+        public int ChanelNumber = -1;
 
 
         /// <summary>
         /// Имя файла конфигурации
         /// </summary>
-        private const string ConfigFileName = "ModDBExport.xml";
+        private const string ConfigFileName = "ModAlarm.xml";
 
 
         /// <summary>
@@ -101,13 +101,8 @@ namespace Scada.Server.Modules
                 XmlDocument xmlDoc = new XmlDocument();
                 xmlDoc.Load(FileName);
 
-                // загрузка назначений экспорта
-                XmlNode root = xmlDoc.DocumentElement.SelectSingleNode("ModAlarm");
-                if (root != null)
-                {
-                    ChanelNumber = root.GetChildAsInt("Chanel");
-                    SoundFileName = root.GetChildAsString("Sound");
-                }
+                ChanelNumber  = xmlDoc.DocumentElement.GetChildAsInt("Chanel");
+                SoundFileName = xmlDoc.DocumentElement.GetChildAsString("Sound");
 
                 errMsg = "";
                 return true;
