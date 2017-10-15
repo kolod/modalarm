@@ -83,11 +83,17 @@ namespace Scada.Server.Modules
         private bool lastState;           // предыдущее состояние сигнала аварии
 
 
+        /// <summary>
+        /// Конструктор
+        /// </summary>
         public ModAlarmLogic()
         {
         }
 
 
+        /// <summary>
+        /// Получить имя модуля
+        /// </summary>
         public override string Name
         {
             get
@@ -96,7 +102,10 @@ namespace Scada.Server.Modules
             }
         }
 
-
+        
+        /// <summary>
+        /// Выполнить действия при запуске работы сервера
+        /// </summary>
         public override void OnServerStart()
         {
             // вывод в журнал
@@ -120,6 +129,10 @@ namespace Scada.Server.Modules
             lastState = false;
         }
 
+
+        /// <summary>
+        /// Выполнить действия при остановке работы сервера
+        /// </summary>
         public override void OnServerStop()
         {
             // вывод информации
@@ -127,6 +140,10 @@ namespace Scada.Server.Modules
             log.WriteBreak();
         }
 
+
+        /// <summary>
+        /// Запустить воспроизведение звука (поддерживается wav формат)
+        /// </summary>
         private void StartAlarm()
         {
             NativeMethods.PlaySound(
@@ -135,13 +152,20 @@ namespace Scada.Server.Modules
               NativeMethods.PlaySoundFlags.SND_ASYNC | NativeMethods.PlaySoundFlags.SND_SYSTEM | NativeMethods.PlaySoundFlags.SND_LOOP
             );
         }
-        
 
+
+        /// <summary>
+        /// Остановить воспроизведение звука
+        /// </summary>
         private void StopAlarm()
         {
             NativeMethods.PlaySound(null, new System.IntPtr(), NativeMethods.PlaySoundFlags.SND_SYNC);
         }
 
+
+        /// <summary>
+        /// Метод выполняется после вычисления дорасчётных каналов текущего среза (примерно каждые 100 мс)
+        /// </summary>
         public override void OnCurDataCalculated(int[] cnlNums, SrezTableLight.Srez curSrez)
         {
             if (config.ChanelNumber >= 0)
