@@ -218,7 +218,7 @@ namespace Scada.Server.Modules.Alarm
             this.ShowInTaskbar = false;
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Серверный модель звуковой  сигнализации";
+            this.Text = "Серверный модуль звуковой сигнализации";
             this.Load += new System.EventHandler(this.FrmAlarmConfig_Load);
             ((System.ComponentModel.ISupportInitialize)(this.inputChanel)).EndInit();
             this.ResumeLayout(false);
