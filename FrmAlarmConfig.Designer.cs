@@ -146,6 +146,10 @@ namespace Scada.Server.Modules.Alarm
             this.label2.TabIndex = 6;
             this.label2.Text = "Аудиофайл:";
             // 
+            // openFileDialog
+            // 
+            this.openFileDialog.Filter = "Waveform Audio File|*wav";
+            // 
             // inputPath
             // 
             this.inputPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -174,6 +178,16 @@ namespace Scada.Server.Modules.Alarm
             this.inputChanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.inputChanel.Location = new System.Drawing.Point(204, 54);
+            this.inputChanel.Maximum = new decimal(new int[] {
+            65535,
+            0,
+            0,
+            0});
+            this.inputChanel.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            -2147483648});
             this.inputChanel.Name = "inputChanel";
             this.inputChanel.Size = new System.Drawing.Size(365, 22);
             this.inputChanel.TabIndex = 9;

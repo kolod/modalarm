@@ -26,17 +26,63 @@
 using Scada.Data.Configuration;
 using Scada.Data.Models;
 using Scada.Data.Tables;
+using Scada.Server.Modules.Alarm;
 using System;
+using System.IO;
+using System.Text;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using Utils;
 
 namespace Scada.Server.Modules
 {
+    internal static class NativeMethods
+    {
+        [DllImport("winmm.dll", EntryPoint = "PlaySound", SetLastError = true, CharSet = CharSet.Unicode, ThrowOnUnmappableChar = true)]
+        public static extern bool PlaySound(
+            string szSound,
+            System.IntPtr hMod,
+            PlaySoundFlags flags);
+
+        [System.Flags]
+        public enum PlaySoundFlags : int
+        {
+            SND_SYNC        = 0x00000000, // play synchronously (default)
+            SND_ASYNC       = 0x00000001, // play asynchronously
+            SND_NODEFAULT   = 0x00000002, // silence (!default) if sound not found
+            SND_MEMORY      = 0x00000004, // pszSound points to a memory file
+            SND_LOOP        = 0x00000008, // loop the sound until next sndPlaySound
+            SND_NOSTOP      = 0x00000010, // don't stop any currently playing sound
+            SND_NOWAIT      = 0x00002000, // don't wait if the driver is busy
+            SND_ALIAS       = 0x00010000, // name is a registry alias
+            SND_ALIAS_ID    = 0x00110000, // alias is a pre d ID
+            SND_FILENAME    = 0x00020000, // name is file name
+            SND_RESOURCE    = 0x00040004, // name is resource name or atom
+            SND_PURGE       = 0000000040, // purge non-static events for task
+            SND_APPLICATION = 0000000080, // look for application specific association
+            SND_SENTRY      = 0x00080000, // Generate a SoundSentry event with this sound
+            SND_RING        = 0x00100000, // Treat this as a "ring" from a communications app - don't duck me
+            SND_SYSTEM      = 0x00200000  // Treat this as a system sound
+        }
+    }
+
     /// <summary>
     /// Server module logic
     /// <para>Логика работы серверного модуля</para>
     /// </summary>
     public class ModAlarmLogic : ModLogic
     {
+        /// <summary>
+        /// Имя файла журнала работы модуля
+        /// </summary>
+        internal const string LogFileName = "ModAlert.log";
+
+
+        private Log log;                  // журнал работы модуля
+        private Config config;            // конфигурация модуля
+        private bool lastState;           // предыдущее состояние сигнала аварии
+
+
         public ModAlarmLogic()
         {
         }
@@ -46,88 +92,71 @@ namespace Scada.Server.Modules
         {
             get
             {
-                return "ModTest";
+                return "ModAlarm";
             }
         }
 
 
         public override void OnServerStart()
         {
-            // the method executes once on server start
-            // метод выполняется один раз при запуске сервера
-            base.OnServerStart();            
+            // вывод в журнал
+            log = new Log(Log.Formats.Simple);
+            log.Encoding = Encoding.UTF8;
+            log.FileName = AppDirs.LogDir + LogFileName;
+            log.WriteBreak();
+            log.WriteAction(string.Format(ModPhrases.StartModule, Name));
+            
+            // загрука конфигурации
+            config = new Config(AppDirs.ConfigDir);
+            string errMsg;
+
+            if (!config.Load(out errMsg))
+            {
+                log.WriteAction(errMsg);
+                log.WriteAction(ModPhrases.NormalModExecImpossible);
+            }
+
+            // обнуление состояния
+            lastState = false;
         }
 
         public override void OnServerStop()
         {
-            // the method executes once on server stop
-            // метод выполняется один раз при остановке сервера
-            base.OnServerStop();
+            // вывод информации
+            log.WriteAction(string.Format(ModPhrases.StopModule, Name));
+            log.WriteBreak();
         }
 
-        public override void OnCurDataProcessed(int[] cnlNums, SrezTableLight.Srez curSrez)
+        private void StartAlarm()
         {
-            // the method executes when new current data have been processed by the server,
-            // the channel numbers are sorted in ascending order
-            // метод выполняется после обработки новых текущих данных сервером,
-            // номера каналов упорядочены по возрастанию
-            const int MyCnlNum = 1;
-            const int MyKpNum = 1;
-            const int MyCmdNum = 1;
-            const double MyCmdVal = 1.0;
+            NativeMethods.PlaySound(
+              config.SoundFileName, 
+              new System.IntPtr(), 
+              NativeMethods.PlaySoundFlags.SND_ASYNC | NativeMethods.PlaySoundFlags.SND_SYSTEM | NativeMethods.PlaySoundFlags.SND_LOOP
+            );
+        }
+        
 
-            // send a command if the value of MyCnlNum channel greater than 200
-            WriteToLog("Process current data by the module " + Name, Log.ActTypes.Action);
-            SrezTableLight.CnlData cnlData;
-            if (curSrez.GetCnlData(MyCnlNum, out cnlData) && cnlData.Val > 200)
-            {
-                WriteToLog("Send command by the module " + Name, Log.ActTypes.Action);
-                Command cmd = new Command(BaseValues.CmdTypes.Standard);
-                cmd.KPNum = MyKpNum;
-                cmd.CmdNum = MyCmdNum;
-                cmd.CmdVal = MyCmdVal;
-                ServerCommands.PassCommand(cmd);
-            }
+        private void StopAlarm()
+        {
+            NativeMethods.PlaySound(null, new System.IntPtr(), NativeMethods.PlaySoundFlags.SND_SYNC);
         }
 
         public override void OnCurDataCalculated(int[] cnlNums, SrezTableLight.Srez curSrez)
         {
-            // the method executes after current data calculation (approximately every 100 ms)
-            // метод выполняется после вычисления дорасчётных каналов текущего среза (примерно каждые 100 мс)
-        }
-
-        public override void OnArcDataProcessed(int[] cnlNums, SrezTableLight.Srez arcSrez)
-        {
-            // the method executes when new archive data have been processed by the server
-            // метод выполняется после обработки новых архивных данных сервером
-            WriteToLog("Process archive data by the module " + Name, Log.ActTypes.Action);
-        }
-
-        public override void OnEventCreating(EventTableLight.Event ev)
-        {
-            // the method executes on event creating, event properties could be changed here
-            // метод выполняется при создании события, свойства события можно изменить здесь
-        }
-
-        public override void OnEventCreated(EventTableLight.Event ev)
-        {
-            // the method executes after event creating
-            // метод выполняется после создания события
-            WriteToLog("Process event creating by the module " + Name, Log.ActTypes.Action);
-        }
-
-        public override void OnEventChecked(DateTime date, int evNum, int userID)
-        {
-            // the method executes after event check
-            // метод выполняется после квитирования события
-            WriteToLog("Process event check by the module " + Name, Log.ActTypes.Action);
-        }
-
-        public override void OnCommandReceived(int ctrlCnlNum, Command cmd, int userID, ref bool passToClients)
-        {
-            // the method executes when a command has been received
-            // метод выполняется после приёма команды ТУ
-            WriteToLog("Process command by the module " + Name, Log.ActTypes.Action);
+            if (config.ChanelNumber >= 0)
+            {
+                SrezTableLight.CnlData cnlData;
+                if (curSrez.GetCnlData(config.ChanelNumber, out cnlData))
+                {
+                    bool state = cnlData.Val > 0;
+                    if (state != lastState)
+                    {
+                        if (state) StartAlarm(); else StopAlarm();
+                    }
+                    lastState = state;
+                }
+            }
         }
     }
 }
