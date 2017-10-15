@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2014 Mikhail Shiryaev
+ * Copyright 2017 Alexandr Kolodkin
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,11 @@
  * 
  * Product  : Rapid SCADA
  * Module   : ModTest
- * Summary  : Server module user interface
+ * Summary  : About form
  * 
- * Author   : Mikhail Shiryaev
- * Created  : 2013
- * Modified : 2014
+ * Author   : Alexandr Kolodkin
+ * Created  : 2017
+ * Modified : 2017
  */
 
 namespace Scada.Server.Modules
