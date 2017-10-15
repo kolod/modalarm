@@ -22,8 +22,8 @@
  * Created  : 2017
  * Modified : 2017
  */
- 
-namespace Scada.Server.Modules
+
+namespace Scada.Server.Modules.Alarm
 {
     partial class FrmAlarmConfig
     {
@@ -69,7 +69,7 @@ namespace Scada.Server.Modules
             // 
             // lblInfo
             // 
-            this.lblInfo.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.lblInfo.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblInfo.Location = new System.Drawing.Point(13, 9);
             this.lblInfo.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
@@ -146,7 +146,7 @@ namespace Scada.Server.Modules
             // 
             // inputPath
             // 
-            this.inputPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.inputPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.inputPath.Location = new System.Drawing.Point(204, 85);
             this.inputPath.Name = "inputPath";
@@ -168,7 +168,7 @@ namespace Scada.Server.Modules
             // 
             // inputChanel
             // 
-            this.inputChanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.inputChanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.inputChanel.Location = new System.Drawing.Point(204, 54);
             this.inputChanel.Name = "inputChanel";

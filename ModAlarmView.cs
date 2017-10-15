@@ -23,6 +23,8 @@
  * Modified : 2017
  */
 
+using Scada.Server.Modules.Alarm;
+
 namespace Scada.Server.Modules
 {
     /// <summary>

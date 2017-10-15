@@ -26,7 +26,7 @@
 using System;
 using System.Windows.Forms;
 
-namespace Scada.Server.Modules
+namespace Scada.Server.Modules.Alarm
 {
     /// <summary>
     /// About form
