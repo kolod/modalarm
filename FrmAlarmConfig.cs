@@ -38,5 +38,18 @@ namespace Scada.Server.Modules
         {
             InitializeComponent();
         }
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("mailto:alexandr.kolodkin@gmail.com");
+        }
+
+        private void btnBrowse_Click(object sender, EventArgs e)
+        {
+            if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                inputPath.Text = openFileDialog.FileName;
+            }
+        }
     }
 }
