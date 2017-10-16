@@ -57,9 +57,9 @@ namespace Scada.Server.Modules.Alarm
             this.btnClose = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
-            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
+            this.linkAuthor = new System.Windows.Forms.LinkLabel();
+            this.lblChanel = new System.Windows.Forms.Label();
+            this.lblPath = new System.Windows.Forms.Label();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.inputPath = new System.Windows.Forms.TextBox();
             this.btnBrowse = new System.Windows.Forms.Button();
@@ -116,35 +116,35 @@ namespace Scada.Server.Modules.Alarm
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
-            // linkLabel1
+            // linkAuthor
             // 
-            this.linkLabel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(12, 168);
-            this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(204, 17);
-            this.linkLabel1.TabIndex = 4;
-            this.linkLabel1.TabStop = true;
-            this.linkLabel1.Text = "Александр Колодкин (с) 2017";
-            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
+            this.linkAuthor.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.linkAuthor.AutoSize = true;
+            this.linkAuthor.Location = new System.Drawing.Point(12, 168);
+            this.linkAuthor.Name = "linkAuthor";
+            this.linkAuthor.Size = new System.Drawing.Size(204, 17);
+            this.linkAuthor.TabIndex = 4;
+            this.linkAuthor.TabStop = true;
+            this.linkAuthor.Text = "Александр Колодкин (с) 2017";
+            this.linkAuthor.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkAuthor_LinkClicked);
             // 
-            // label1
+            // lblChanel
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 56);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(168, 17);
-            this.label1.TabIndex = 5;
-            this.label1.Text = "Номер входного канала:";
+            this.lblChanel.AutoSize = true;
+            this.lblChanel.Location = new System.Drawing.Point(12, 56);
+            this.lblChanel.Name = "lblChanel";
+            this.lblChanel.Size = new System.Drawing.Size(168, 17);
+            this.lblChanel.TabIndex = 5;
+            this.lblChanel.Text = "Номер входного канала:";
             // 
-            // label2
+            // lblPath
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 88);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(87, 17);
-            this.label2.TabIndex = 6;
-            this.label2.Text = "Аудиофайл:";
+            this.lblPath.AutoSize = true;
+            this.lblPath.Location = new System.Drawing.Point(12, 88);
+            this.lblPath.Name = "lblPath";
+            this.lblPath.Size = new System.Drawing.Size(87, 17);
+            this.lblPath.TabIndex = 6;
+            this.lblPath.Text = "Аудиофайл:";
             // 
             // openFileDialog
             // 
@@ -203,9 +203,9 @@ namespace Scada.Server.Modules.Alarm
             this.Controls.Add(this.inputChanel);
             this.Controls.Add(this.btnBrowse);
             this.Controls.Add(this.inputPath);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.linkLabel1);
+            this.Controls.Add(this.lblPath);
+            this.Controls.Add(this.lblChanel);
+            this.Controls.Add(this.linkAuthor);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.btnClose);
@@ -219,6 +219,7 @@ namespace Scada.Server.Modules.Alarm
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Серверный модуль звуковой сигнализации";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmAlarmConfig_FormClosing);
             this.Load += new System.EventHandler(this.FrmAlarmConfig_Load);
             ((System.ComponentModel.ISupportInitialize)(this.inputChanel)).EndInit();
             this.ResumeLayout(false);
@@ -232,9 +233,9 @@ namespace Scada.Server.Modules.Alarm
         private System.Windows.Forms.Button btnClose;
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.Button btnCancel;
-        private System.Windows.Forms.LinkLabel linkLabel1;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.LinkLabel linkAuthor;
+        private System.Windows.Forms.Label lblChanel;
+        private System.Windows.Forms.Label lblPath;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
         private System.Windows.Forms.TextBox inputPath;
         private System.Windows.Forms.Button btnBrowse;

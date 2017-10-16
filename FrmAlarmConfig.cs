@@ -128,14 +128,18 @@ namespace Scada.Server.Modules.Alarm
             changing = false;
         }
 
+
+        /// <summary>
+        /// Отобразить конфигурацию
+        /// </summary>
         private void FrmAlarmConfig_Load(object sender, EventArgs e)
         {
             // локализация модуля
             string errMsg;
             if (!Localization.UseRussian)
             {
-                if (Localization.LoadDictionaries(appDirs.LangDir, "ModAlert", out errMsg))
-                    Translator.TranslateForm(this, "Scada.Server.Modules.Alert.FrmAlertConfig");
+                if (Localization.LoadDictionaries(appDirs.LangDir, "ModAlarm", out errMsg))
+                    Translator.TranslateForm(this, "Scada.Server.Modules.Alarm.FrmAlarmConfig");
                 else
                     ScadaUiUtils.ShowError(errMsg);
             }
@@ -156,7 +160,7 @@ namespace Scada.Server.Modules.Alarm
         }
 
 
-        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void linkAuthor_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             System.Diagnostics.Process.Start("mailto:alexandr.kolodkin@gmail.com");
         }
@@ -170,6 +174,7 @@ namespace Scada.Server.Modules.Alarm
             }
         }
 
+
         private void inputChanel_ValueChanged(object sender, EventArgs e)
         {
             if (!changing)
@@ -178,6 +183,7 @@ namespace Scada.Server.Modules.Alarm
                 Modified = true;
             }
         }
+
 
         private void inputPath_TextChanged(object sender, EventArgs e)
         {
@@ -188,11 +194,13 @@ namespace Scada.Server.Modules.Alarm
             }
         }
 
+
         private void btnSave_Click(object sender, EventArgs e)
         {
             // сохранение конфигурации модуля
             SaveConfig();
         }
+
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
@@ -201,6 +209,29 @@ namespace Scada.Server.Modules.Alarm
             configCopy = config.Clone();
             ConfigToControls();
             Modified = false;
+        }
+
+
+        private void FrmAlarmConfig_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (Modified)
+            {
+                DialogResult result = MessageBox.Show(ModPhrases.SaveModSettingsConfirm,
+                    CommonPhrases.QuestionCaption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+
+                switch (result)
+                {
+                    case DialogResult.Yes:
+                        if (!SaveConfig())
+                            e.Cancel = true;
+                        break;
+                    case DialogResult.No:
+                        break;
+                    default:
+                        e.Cancel = true;
+                        break;
+                }
+            }
         }
     }
 }
