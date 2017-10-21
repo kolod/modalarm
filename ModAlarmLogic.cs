@@ -115,7 +115,7 @@ namespace Scada.Server.Modules
             log.WriteBreak();
             log.WriteAction(string.Format(ModPhrases.StartModule, Name));
             
-            // загрука конфигурации
+            // загрузка конфигурации
             config = new Config(AppDirs.ConfigDir);
             string errMsg;
 
