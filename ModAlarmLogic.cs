@@ -75,7 +75,7 @@ namespace Scada.Server.Modules
         /// <summary>
         /// Имя файла журнала работы модуля
         /// </summary>
-        internal const string LogFileName = "ModAlert.log";
+        internal const string LogFileName = "ModAlarm.log";
 
 
         private Log log;                  // журнал работы модуля
