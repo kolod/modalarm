@@ -77,7 +77,7 @@ namespace Scada.Server.Modules
         /// <summary>
         /// Получить полное имя файла конфигурации
         /// </summary>
-        public string FileName { get; private set; }
+        private string FileName { get; set; }
 
 
         /// <summary>
