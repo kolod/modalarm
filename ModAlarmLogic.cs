@@ -22,15 +22,12 @@
  * Created  : 2017
  * Modified : 2017
  */
-
-using Scada.Data.Configuration;
-using Scada.Data.Models;
+ 
 using Scada.Data.Tables;
-using Scada.Server.Modules.Alarm;
 using System;
 using System.IO;
 using System.Text;
-using System.Collections.Generic;
+using System.Threading;
 using System.Runtime.InteropServices;
 using Utils;
 
@@ -77,7 +74,14 @@ namespace Scada.Server.Modules
         /// </summary>
         internal const string LogFileName = "ModAlarm.log";
 
+        /// <summary>
+        /// Имя файла информации о работе модуля
+        /// </summary>
+        private const string InfoFileName = "ModAlarm.txt";
 
+        private bool normalWork;          // признак нормальной работы модуля
+        private string workState;         // строковая запись состояния работы
+        private string infoFileName;      // полное имя файла информации
         private Log log;                  // журнал работы модуля
         private Config config;            // конфигурация модуля
         private bool lastState;           // предыдущее состояние сигнала аварии
@@ -88,6 +92,8 @@ namespace Scada.Server.Modules
         /// </summary>
         public ModAlarmLogic()
         {
+            normalWork = true;
+            workState = Localization.UseRussian ? "норма" : "normal";
         }
 
 
@@ -96,18 +102,62 @@ namespace Scada.Server.Modules
         /// </summary>
         public override string Name
         {
-            get
+            get { return "ModAlarm"; }
+        }
+
+
+        /// <summary>
+        /// Записать в файл информацию о работе модуля
+        /// </summary>
+        private void WriteInfo()
+        {
+            try
             {
-                return "ModAlarm";
+                // формирование текста
+                StringBuilder sbInfo = new StringBuilder();
+
+                if (Localization.UseRussian)
+                {
+                    sbInfo
+                        .AppendLine("Модуль аварийной сигнализации")
+                        .AppendLine("----------------------")
+                        .Append("Состояние: ").AppendLine(workState).AppendLine()
+                        .Append("Аудио файл: ").AppendLine(config.SoundFileName);
+                }
+                else
+                {
+                    sbInfo
+                        .AppendLine("Sound Alarm Module")
+                        .AppendLine("------------------")
+                        .Append("State: ").AppendLine(workState).AppendLine()
+                        .Append("Sound file: ").AppendLine(config.SoundFileName);
+                }
+
+                // вывод в файл
+                using (StreamWriter writer = new StreamWriter(infoFileName, false, Encoding.UTF8))
+                    writer.Write(sbInfo.ToString());
+            }
+            catch (ThreadAbortException)
+            {
+            }
+            catch (Exception ex)
+            {
+                log.WriteAction(ModPhrases.WriteInfoError + ": " + ex.Message, Log.ActTypes.Exception);
             }
         }
 
-        
+
         /// <summary>
         /// Выполнить действия при запуске работы сервера
         /// </summary>
         public override void OnServerStart()
         {
+            // обнуление состояния
+            lastState = false;
+
+            // определение полного имени файла информации
+            infoFileName = AppDirs.LogDir + InfoFileName;
+
             // вывод в журнал
             log = new Log(Log.Formats.Simple);
             log.Encoding = Encoding.UTF8;
@@ -121,12 +171,14 @@ namespace Scada.Server.Modules
 
             if (!config.Load(out errMsg))
             {
+                normalWork = false;
+                workState = Localization.UseRussian ? "ошибка" : "error";
                 log.WriteAction(errMsg);
                 log.WriteAction(ModPhrases.NormalModExecImpossible);
             }
 
-            // обнуление состояния
-            lastState = false;
+            if (config.ChanelNumber < 0) normalWork = false;
+            WriteInfo();
         }
 
 
@@ -136,6 +188,8 @@ namespace Scada.Server.Modules
         public override void OnServerStop()
         {
             // вывод информации
+            workState = Localization.UseRussian ? "остановлен" : "stopped";
+            WriteInfo();
             log.WriteAction(string.Format(ModPhrases.StopModule, Name));
             log.WriteBreak();
         }
