@@ -222,17 +222,24 @@ namespace Scada.Server.Modules
         /// </summary>
         public override void OnCurDataCalculated(int[] cnlNums, SrezTableLight.Srez curSrez)
         {
-            if (config.ChanelNumber >= 0)
+            if (normalWork)
             {
-                SrezTableLight.CnlData cnlData;
-                if (curSrez.GetCnlData(config.ChanelNumber, out cnlData))
+                try
                 {
-                    bool state = cnlData.Val > 0;
-                    if (state != lastState)
+                    SrezTableLight.CnlData cnlData;
+                    if (curSrez.GetCnlData(config.ChanelNumber, out cnlData))
                     {
-                        if (state) StartAlarm(); else StopAlarm();
+                        bool state = cnlData.Val > 0;
+                        if (state != lastState)
+                        {
+                            if (state) StartAlarm(); else StopAlarm();
+                        }
+                        lastState = state;
                     }
-                    lastState = state;
+                }
+                catch (Exception ex)
+                {
+                    log.WriteException(ex);
                 }
             }
         }
