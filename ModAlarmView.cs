@@ -48,7 +48,7 @@ namespace Scada.Server.Modules
         {
             get
             {
-                return Localization.UseRussian ? "Серверный модуль для тестирования." : "Server module for testing.";
+                return Localization.UseRussian ? "Серверный модуль для звуковой сигнализации." : "Server module for the sound alarm.";
             }
         }
 
