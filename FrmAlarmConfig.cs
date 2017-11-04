@@ -146,7 +146,7 @@ namespace Scada.Server.Modules.Alarm
 
             // загрузка конфигурации
             config = new Config(appDirs.ConfigDir);
-            if (!config.Load(out errMsg)) ScadaUiUtils.ShowError(errMsg);
+            if (File.Exists(config.FileName) && !config.Load(out errMsg)) ScadaUiUtils.ShowError(errMsg);
 
             // создание копии конфигурации
             configCopy = config.Clone();
