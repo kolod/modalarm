@@ -15,12 +15,12 @@
  * 
  * 
  * Product  : Rapid SCADA
- * Module   : ModDBExport
+ * Module   : ModAlarm
  * Summary  : Module configuration
  * 
- * Author   : Mikhail Shiryaev
- * Created  : 2015
- * Modified : 2015
+ * Author   : Alexandr Kolodkin
+ * Created  : 2017
+ * Modified : 2017
  */
 
 using System;

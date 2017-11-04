@@ -15,8 +15,8 @@
  * 
  * 
  * Product  : Rapid SCADA
- * Module   : ModTest
- * Summary  : About form
+ * Module   : ModAlarm
+ * Summary  : Server module logic
  * 
  * Author   : Alexandr Kolodkin
  * Created  : 2017
