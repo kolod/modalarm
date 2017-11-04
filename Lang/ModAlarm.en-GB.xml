@@ -10,5 +10,6 @@
     <Phrase key="btnCancel">Cancel</Phrase>
     <Phrase key="btnClose">Close</Phrase>
     <Phrase key="btnBrowse">Browse</Phrase>
+    <Phrase key="openFileDialog.Filter">Waveform Audio File (*.wav)|*.wav</Phrase>
   </Dictionary>  
 </ModAlarmDictionaries>

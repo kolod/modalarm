@@ -148,7 +148,7 @@ namespace Scada.Server.Modules.Alarm
             // 
             // openFileDialog
             // 
-            this.openFileDialog.Filter = "Waveform Audio File|*wav";
+            this.openFileDialog.Filter = "WAV аудиофайл (*.wav)|*.wav";
             // 
             // inputPath
             // 
