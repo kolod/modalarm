@@ -10,10 +10,10 @@
 Включить ModAlarm на вкладке модули.
 
 ### Скриншот
-![ModAlarm screenshot](https://github.com/kolod/modalarm/raw/master/screenshot.png)
+![ModAlarm screenshot](https://github.com/kolod/modalarm/raw/master/screenshot.ru.png)
 
 ### Пример использования:
-![Administrator screenshot](https://github.com/kolod/modalarm/raw/master/screenshot-setup.png)
+![Administrator screenshot](https://github.com/kolod/modalarm/raw/master/screenshot-setup.ru.png)
 
 ```C#
 // Формула для канала 65000
