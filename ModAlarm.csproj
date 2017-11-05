@@ -35,6 +35,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Log\bin\Release\Log.dll</HintPath>
     </Reference>
+    <Reference Include="NAudio">
+      <HintPath>.\NAudio.dll</HintPath>
+    </Reference>
     <Reference Include="ScadaData, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\ScadaData\ScadaData\bin\Release\ScadaData.dll</HintPath>
@@ -56,6 +59,7 @@
     <Compile Include="FrmAlarmConfig.Designer.cs">
       <DependentUpon>FrmAlarmConfig.cs</DependentUpon>
     </Compile>
+    <Compile Include="LoopStream.cs" />
     <Compile Include="ModAlarmLogic.cs" />
     <Compile Include="ModAlarmView.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

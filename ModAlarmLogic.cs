@@ -28,41 +28,11 @@ using System;
 using System.IO;
 using System.Text;
 using System.Threading;
-using System.Runtime.InteropServices;
 using Utils;
+using NAudio.Wave;
 
 namespace Scada.Server.Modules
 {
-    internal static class NativeMethods
-    {
-        [DllImport("winmm.dll", EntryPoint = "PlaySound", SetLastError = true, CharSet = CharSet.Unicode, ThrowOnUnmappableChar = true)]
-        public static extern bool PlaySound(
-            string szSound,
-            System.IntPtr hMod,
-            PlaySoundFlags flags);
-
-        [System.Flags]
-        public enum PlaySoundFlags : int
-        {
-            SND_SYNC        = 0x00000000, // play synchronously (default)
-            SND_ASYNC       = 0x00000001, // play asynchronously
-            SND_NODEFAULT   = 0x00000002, // silence (!default) if sound not found
-            SND_MEMORY      = 0x00000004, // pszSound points to a memory file
-            SND_LOOP        = 0x00000008, // loop the sound until next sndPlaySound
-            SND_NOSTOP      = 0x00000010, // don't stop any currently playing sound
-            SND_NOWAIT      = 0x00002000, // don't wait if the driver is busy
-            SND_ALIAS       = 0x00010000, // name is a registry alias
-            SND_ALIAS_ID    = 0x00110000, // alias is a pre d ID
-            SND_FILENAME    = 0x00020000, // name is file name
-            SND_RESOURCE    = 0x00040004, // name is resource name or atom
-            SND_PURGE       = 0000000040, // purge non-static events for task
-            SND_APPLICATION = 0000000080, // look for application specific association
-            SND_SENTRY      = 0x00080000, // Generate a SoundSentry event with this sound
-            SND_RING        = 0x00100000, // Treat this as a "ring" from a communications app - don't duck me
-            SND_SYSTEM      = 0x00200000  // Treat this as a system sound
-        }
-    }
-
     /// <summary>
     /// Server module logic
     /// <para>Логика работы серверного модуля</para>
@@ -85,6 +55,7 @@ namespace Scada.Server.Modules
         private Log log;                  // журнал работы модуля
         private Config config;            // конфигурация модуля
         private bool lastState;           // предыдущее состояние сигнала аварии
+        private WaveOut waveOut;          // 
 
 
         /// <summary>
@@ -200,11 +171,23 @@ namespace Scada.Server.Modules
         /// </summary>
         private void StartAlarm()
         {
-            NativeMethods.PlaySound(
-              config.SoundFileName, 
-              new System.IntPtr(), 
-              NativeMethods.PlaySoundFlags.SND_ASYNC | NativeMethods.PlaySoundFlags.SND_SYSTEM | NativeMethods.PlaySoundFlags.SND_LOOP
-            );
+            try
+            {
+                if (waveOut == null)
+                {
+                    WaveFileReader reader = new WaveFileReader(config.SoundFileName);
+                    LoopStream loop = new LoopStream(reader);
+                    waveOut = new WaveOut();
+                    waveOut.Init(loop);
+                    waveOut.Play();
+                }
+            }
+            catch (Exception ex)
+            {
+                log.WriteAction(string.Format(Localization.UseRussian ?
+                    "Ошибка при воспроизведении аудиофайла {0}: {1}" :
+                    "Error playing audio file {0}: {1}", config.SoundFileName, ex.Message));
+            }
         }
 
 
@@ -213,7 +196,21 @@ namespace Scada.Server.Modules
         /// </summary>
         private void StopAlarm()
         {
-            NativeMethods.PlaySound(null, new System.IntPtr(), NativeMethods.PlaySoundFlags.SND_SYNC);
+            try
+            {
+                if (waveOut != null)
+                {
+                    waveOut.Stop();
+                    waveOut.Dispose();
+                    waveOut = null;
+                }
+            }
+            catch (Exception ex)
+            {
+                log.WriteAction(string.Format(Localization.UseRussian ?
+                    "Ошибка при остановке воспроизведения аудиофайла {0}: {1}" :
+                    "Error while stoping audio file {0}: {1}", config.SoundFileName, ex.Message));
+            }
         }
 
 
