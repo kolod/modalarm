@@ -13,7 +13,7 @@ Enable ModAlarm on the modules tab.
 ### Screenshot
 ![ModAlarm screenshot](https://github.com/kolod/modalarm/raw/master/screenshot.png)
 
-### Пример использования:
+### Usage example:
 ![Administrator screenshot](https://github.com/kolod/modalarm/raw/master/screenshot-setup.png)
 
 ```C#
