@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2017 Alexandr Kolodkin
+ * Copyright 2017-2018 Alexandr Kolodkin
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@
  * 
  * Author   : Alexandr Kolodkin
  * Created  : 2017
- * Modified : 2017
+ * Modified : 2018
  */
 
 using Scada.Client;
@@ -123,8 +123,8 @@ namespace Scada.Server.Modules.Alarm
         private void ConfigToControls()
         {
             changing = true;
-            inputChanel.SetValue(config.ChanelNumber);
-            inputPath.Text = config.SoundFileName;
+            //inputChanel.SetValue(config.ChanelNumber);
+            //inputPath.Text = config.SoundFileName;
             changing = false;
         }
 
@@ -146,7 +146,7 @@ namespace Scada.Server.Modules.Alarm
 
             // загрузка конфигурации
             config = new Config(appDirs.ConfigDir);
-            if (File.Exists(config.FileName) && !config.Load(out errMsg)) ScadaUiUtils.ShowError(errMsg);
+            if (File.Exists(config.fileName) && !config.Load(out errMsg)) ScadaUiUtils.ShowError(errMsg);
 
             // создание копии конфигурации
             configCopy = config.Clone();
@@ -178,7 +178,7 @@ namespace Scada.Server.Modules.Alarm
         {
             if (!changing)
             {
-                config.ChanelNumber = Decimal.ToInt32(inputChanel.Value);
+                //config.ChanelNumber = Decimal.ToInt32(inputChanel.Value);
                 Modified = true;
             }
         }
@@ -188,7 +188,7 @@ namespace Scada.Server.Modules.Alarm
         {
             if (!changing)
             {
-                config.SoundFileName = inputPath.Text;
+                //config.SoundFileName = inputPath.Text;
                 Modified = true;
             }
         }

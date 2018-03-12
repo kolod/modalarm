@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2017 Alexandr Kolodkin
+ * Copyright 2017-2018 Alexandr Kolodkin
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,10 +20,11 @@
  * 
  * Author   : Alexandr Kolodkin
  * Created  : 2017
- * Modified : 2017
+ * Modified : 2018
  */
  
 using Scada.Data.Tables;
+using System.Collections.Generic;
 using System;
 using System.IO;
 using System.Text;
@@ -54,8 +55,8 @@ namespace Scada.Server.Modules
         private string infoFileName;      // полное имя файла информации
         private Log log;                  // журнал работы модуля
         private Config config;            // конфигурация модуля
-        private bool lastState;           // предыдущее состояние сигнала аварии
-        private WaveOut waveOut;          // 
+        private SortedDictionary<int, bool> lastState = new SortedDictionary<int, bool>();          // предыдущее состояние сигнала аварии
+        private SortedDictionary<int, WaveOut> waveOuts = new SortedDictionary<int, WaveOut>();     //
 
 
         /// <summary>
@@ -92,16 +93,27 @@ namespace Scada.Server.Modules
                     sbInfo
                         .AppendLine("Модуль аварийной сигнализации")
                         .AppendLine("----------------------")
-                        .Append("Состояние: ").AppendLine(workState).AppendLine()
-                        .Append("Аудио файл: ").AppendLine(config.SoundFileName);
+                        .Append("Состояние: ").AppendLine(workState).AppendLine();
+                    foreach (KeyValuePair<int, string> channel in config.channels)
+                    {
+                        sbInfo
+                            .Append("Канал: ").Append(channel.Key)
+                            .Append(", Аудио файл: ").AppendLine(channel.Value);
+                    }
                 }
                 else
                 {
                     sbInfo
                         .AppendLine("Sound Alarm Module")
                         .AppendLine("------------------")
-                        .Append("State: ").AppendLine(workState).AppendLine()
-                        .Append("Sound file: ").AppendLine(config.SoundFileName);
+                        .Append("State: ").AppendLine(workState).AppendLine();
+
+                    foreach (KeyValuePair<int, string> channel in config.channels)
+                    {
+                        sbInfo
+                            .Append("Channel: ").Append(channel.Key)
+                            .Append(", Sound file: ").AppendLine(channel.Value);
+                    }
                 }
 
                 // вывод в файл
@@ -123,9 +135,6 @@ namespace Scada.Server.Modules
         /// </summary>
         public override void OnServerStart()
         {
-            // обнуление состояния
-            lastState = false;
-
             // определение полного имени файла информации
             infoFileName = AppDirs.LogDir + InfoFileName;
 
@@ -140,16 +149,17 @@ namespace Scada.Server.Modules
             config = new Config(AppDirs.ConfigDir);
             string errMsg;
 
-            if (!config.Load(out errMsg))
+            if (config.Load(out errMsg))
+            {
+                WriteInfo();
+            }
+            else
             {
                 normalWork = false;
                 workState = Localization.UseRussian ? "ошибка" : "error";
                 log.WriteAction(errMsg);
                 log.WriteAction(ModPhrases.NormalModExecImpossible);
             }
-
-            if (config.ChanelNumber < 0) normalWork = false;
-            WriteInfo();
         }
 
 
@@ -167,26 +177,36 @@ namespace Scada.Server.Modules
 
 
         /// <summary>
+        /// Создать экземпляр ласса для воспроизведения файла
+        /// </summary>
+        private void AddWaweOut(int channel)
+        {
+            if (config.channels.ContainsKey(channel))
+            {
+                WaveFileReader reader = new WaveFileReader(config.channels[channel]);
+                LoopStream loop = new LoopStream(reader);
+                waveOuts.Add(channel, new WaveOut());
+                waveOuts[channel].Init(loop);
+            }
+        }
+
+
+        /// <summary>
         /// Запустить воспроизведение звука (поддерживается wav формат)
         /// </summary>
-        private void StartAlarm()
+        private void StartAlarm(int channel)
         {
             try
             {
-                if (waveOut == null)
-                {
-                    WaveFileReader reader = new WaveFileReader(config.SoundFileName);
-                    LoopStream loop = new LoopStream(reader);
-                    waveOut = new WaveOut();
-                    waveOut.Init(loop);
-                    waveOut.Play();
-                }
+                if (waveOuts.ContainsKey(channel) == false) AddWaweOut(channel);
+                if (waveOuts[channel] == null) AddWaweOut(channel);
+                if (waveOuts[channel] != null) waveOuts[channel].Play();
             }
             catch (Exception ex)
             {
                 log.WriteAction(string.Format(Localization.UseRussian ?
                     "Ошибка при воспроизведении аудиофайла {0}: {1}" :
-                    "Error playing audio file {0}: {1}", config.SoundFileName, ex.Message));
+                    "Error playing audio file {0}: {1}", config.channels[channel], ex.Message));
             }
         }
 
@@ -194,22 +214,22 @@ namespace Scada.Server.Modules
         /// <summary>
         /// Остановить воспроизведение звука
         /// </summary>
-        private void StopAlarm()
+        private void StopAlarm(int channel)
         {
             try
             {
-                if (waveOut != null)
+                if (waveOuts.ContainsKey(channel) && (waveOuts[channel] != null))
                 {
-                    waveOut.Stop();
-                    waveOut.Dispose();
-                    waveOut = null;
+                    waveOuts[channel].Stop();
+                    waveOuts[channel].Dispose();
+                    waveOuts[channel] = null;
                 }
             }
             catch (Exception ex)
             {
                 log.WriteAction(string.Format(Localization.UseRussian ?
                     "Ошибка при остановке воспроизведения аудиофайла {0}: {1}" :
-                    "Error while stoping audio file {0}: {1}", config.SoundFileName, ex.Message));
+                    "Error while stoping audio file {0}: {1}", config.channels[channel], ex.Message));
             }
         }
 
@@ -223,15 +243,21 @@ namespace Scada.Server.Modules
             {
                 try
                 {
-                    SrezTableLight.CnlData cnlData;
-                    if (curSrez.GetCnlData(config.ChanelNumber, out cnlData))
+                    foreach (int channel in config.channels.Keys)
                     {
-                        bool state = cnlData.Val > 0;
-                        if (state != lastState)
+                        SrezTableLight.CnlData cnlData;
+
+                        if (curSrez.GetCnlData(channel, out cnlData))
                         {
-                            if (state) StartAlarm(); else StopAlarm();
+                            bool state = cnlData.Val > 0;
+
+                            if ((lastState.ContainsKey(channel)) && (lastState[channel] != state))
+                            {
+                                if (state) StartAlarm(channel); else StopAlarm(channel);
+                            }
+
+                            lastState[channel] = state;
                         }
-                        lastState = state;
                     }
                 }
                 catch (Exception ex)

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2015 Mikhail Shiryaev
+ * Copyright 2017-2018 Alexandr Kolodkin
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@
  * 
  * Author   : Alexandr Kolodkin
  * Created  : 2017
- * Modified : 2017
+ * Modified : 2018
  */
 
 using System;
@@ -40,21 +40,15 @@ namespace Scada.Server.Modules
     internal class Config
     {
         /// <summary>
-        /// Имя аудиофайла
-        /// </summary>
-        public string SoundFileName = "";
-
-
-        /// <summary>
-        /// Имя аудиофайла
-        /// </summary>
-        public int ChanelNumber = -1;
-
-
-        /// <summary>
         /// Имя файла конфигурации
         /// </summary>
-        private const string ConfigFileName = "ModAlarm.xml";
+        private const string configFileName = "ModAlarm.xml";
+
+
+        /// <summary>
+        /// Список каналов и аудиофайлов
+        /// </summary>
+        public SortedDictionary<int,string> channels = new SortedDictionary<int, string>();
 
 
         /// <summary>
@@ -69,7 +63,7 @@ namespace Scada.Server.Modules
         /// </summary>
         public Config(string configDir)
         {
-            FileName = ScadaUtils.NormalDir(configDir) + ConfigFileName;
+            fileName = ScadaUtils.NormalDir(configDir) + configFileName;
             SetToDefault();
         }
 
@@ -77,7 +71,7 @@ namespace Scada.Server.Modules
         /// <summary>
         /// Получить полное имя файла конфигурации
         /// </summary>
-        public string FileName { get; private set; }
+        public string fileName { get; private set; }
 
 
         /// <summary>
@@ -85,8 +79,7 @@ namespace Scada.Server.Modules
         /// </summary>
         private void SetToDefault()
         {
-            ChanelNumber = -1;
-            SoundFileName = "";
+            channels.Clear();
         }
 
         /// <summary>
@@ -99,10 +92,21 @@ namespace Scada.Server.Modules
             try
             {
                 XmlDocument xmlDoc = new XmlDocument();
-                xmlDoc.Load(FileName);
+                xmlDoc.Load(fileName);
 
-                ChanelNumber  = xmlDoc.DocumentElement.GetChildAsInt("Chanel");
-                SoundFileName = xmlDoc.DocumentElement.GetChildAsString("Sound");
+                XmlNode root = xmlDoc.DocumentElement;
+                XmlNodeList alerts = root.ChildNodes;
+
+                foreach (XmlNode alert in alerts)
+                {
+                    int channel = alert.GetChildAsInt("Channel");
+                    string soundFileName = alert.GetChildAsString("Sound");
+
+                    if (channels.ContainsKey(channel) == false)
+                    {
+                        channels.Add(channel, soundFileName);
+                    }
+                }
 
                 errMsg = "";
                 return true;
@@ -135,10 +139,15 @@ namespace Scada.Server.Modules
                 XmlElement root = xmlDoc.CreateElement("ModAlarm");
                 xmlDoc.AppendChild(root);
 
-                root.AppendElem("Sound", SoundFileName);
-                root.AppendElem("Chanel", ChanelNumber);
+                foreach(KeyValuePair<int, string> channel in channels)
+                {
+                    XmlElement alert = xmlDoc.CreateElement("Alarm");
+                    alert.AppendElem("Channel", channel.Key);
+                    alert.AppendElem("Sound", channel.Value);
+                    root.AppendChild(alert);
+                }
 
-                xmlDoc.Save(FileName);
+                xmlDoc.Save(fileName);
                 errMsg = "";
                 return true;
             }
@@ -155,9 +164,8 @@ namespace Scada.Server.Modules
         public Config Clone()
         {
             Config configCopy = new Config();
-            configCopy.FileName = FileName;
-            configCopy.ChanelNumber = ChanelNumber;
-            configCopy.SoundFileName = SoundFileName;
+            configCopy.fileName = fileName;
+            configCopy.channels = channels;
 
             return configCopy;
         }

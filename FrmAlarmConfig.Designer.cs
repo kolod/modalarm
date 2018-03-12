@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2017 Alexandr Kolodkin
+ * Copyright 2017-2018 Alexandr Kolodkin
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@
  * 
  * Author   : Alexandr Kolodkin
  * Created  : 2017
- * Modified : 2017
+ * Modified : 2018
  */
 
 namespace Scada.Server.Modules.Alarm

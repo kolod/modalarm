@@ -33,17 +33,20 @@
   <ItemGroup>
     <Reference Include="Log, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Log\bin\Release\Log.dll</HintPath>
+      <HintPath>C:\Users\alexa\OneDrive\Документы\Visual Studio 2017\Projects\scada\Log\bin\Release\Log.dll</HintPath>
     </Reference>
     <Reference Include="NAudio">
-      <HintPath>.\NAudio.dll</HintPath>
+      <HintPath>C:\Users\alexa\OneDrive\Документы\Visual Studio 2017\Projects\NAudio\NAudio\bin\Release\NAudio.dll</HintPath>
+    </Reference>
+    <Reference Include="ScadaCommCommon">
+      <HintPath>C:\Users\alexa\OneDrive\Документы\Visual Studio 2017\Projects\scada\ScadaComm\ScadaCommCommon\bin\Release\ScadaCommCommon.dll</HintPath>
     </Reference>
     <Reference Include="ScadaData, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\ScadaData\ScadaData\bin\Release\ScadaData.dll</HintPath>
+      <HintPath>C:\Users\alexa\OneDrive\Документы\Visual Studio 2017\Projects\scada\ScadaComm\ScadaCommCommon\bin\Release\ScadaData.dll</HintPath>
     </Reference>
     <Reference Include="ScadaServerCommon">
-      <HintPath>..\..\ScadaServerSvc\bin\Debug\ScadaServerCommon.dll</HintPath>
+      <HintPath>C:\Users\alexa\OneDrive\Документы\Visual Studio 2017\Projects\scada\ScadaServer\ScadaServerCommon\bin\Release\ScadaServerCommon.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
