@@ -58,13 +58,13 @@ namespace Scada.Server.Modules.Alarm
             this.btnSave = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.linkAuthor = new System.Windows.Forms.LinkLabel();
-            this.lblChanel = new System.Windows.Forms.Label();
-            this.lblPath = new System.Windows.Forms.Label();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.inputPath = new System.Windows.Forms.TextBox();
-            this.btnBrowse = new System.Windows.Forms.Button();
-            this.inputChanel = new System.Windows.Forms.NumericUpDown();
-            ((System.ComponentModel.ISupportInitialize)(this.inputChanel)).BeginInit();
+            this.inputChannels = new System.Windows.Forms.ListView();
+            this.channel = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.path = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.lblLine = new System.Windows.Forms.Label();
+            this.btnAdd = new System.Windows.Forms.Button();
+            this.btnRemove = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // lblInfo
@@ -74,7 +74,7 @@ namespace Scada.Server.Modules.Alarm
             this.lblInfo.Location = new System.Drawing.Point(13, 9);
             this.lblInfo.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblInfo.Name = "lblInfo";
-            this.lblInfo.Size = new System.Drawing.Size(556, 63);
+            this.lblInfo.Size = new System.Drawing.Size(556, 55);
             this.lblInfo.TabIndex = 0;
             this.lblInfo.Text = "Модуль воспроизводит выбранный звуковой сигнал пока значение указанного канала не" +
     " равно 0";
@@ -84,7 +84,7 @@ namespace Scada.Server.Modules.Alarm
             // 
             this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnClose.Location = new System.Drawing.Point(469, 162);
+            this.btnClose.Location = new System.Drawing.Point(469, 462);
             this.btnClose.Margin = new System.Windows.Forms.Padding(4);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(100, 28);
@@ -95,7 +95,7 @@ namespace Scada.Server.Modules.Alarm
             // btnSave
             // 
             this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSave.Location = new System.Drawing.Point(253, 162);
+            this.btnSave.Location = new System.Drawing.Point(253, 462);
             this.btnSave.Margin = new System.Windows.Forms.Padding(4);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(100, 28);
@@ -107,7 +107,7 @@ namespace Scada.Server.Modules.Alarm
             // btnCancel
             // 
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCancel.Location = new System.Drawing.Point(361, 162);
+            this.btnCancel.Location = new System.Drawing.Point(361, 462);
             this.btnCancel.Margin = new System.Windows.Forms.Padding(4);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(100, 28);
@@ -120,7 +120,7 @@ namespace Scada.Server.Modules.Alarm
             // 
             this.linkAuthor.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.linkAuthor.AutoSize = true;
-            this.linkAuthor.Location = new System.Drawing.Point(12, 168);
+            this.linkAuthor.Location = new System.Drawing.Point(12, 468);
             this.linkAuthor.Name = "linkAuthor";
             this.linkAuthor.Size = new System.Drawing.Size(204, 17);
             this.linkAuthor.TabIndex = 4;
@@ -128,71 +128,61 @@ namespace Scada.Server.Modules.Alarm
             this.linkAuthor.Text = "Александр Колодкин (с) 2017";
             this.linkAuthor.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkAuthor_LinkClicked);
             // 
-            // lblChanel
-            // 
-            this.lblChanel.AutoSize = true;
-            this.lblChanel.Location = new System.Drawing.Point(12, 56);
-            this.lblChanel.Name = "lblChanel";
-            this.lblChanel.Size = new System.Drawing.Size(168, 17);
-            this.lblChanel.TabIndex = 5;
-            this.lblChanel.Text = "Номер входного канала:";
-            // 
-            // lblPath
-            // 
-            this.lblPath.AutoSize = true;
-            this.lblPath.Location = new System.Drawing.Point(12, 88);
-            this.lblPath.Name = "lblPath";
-            this.lblPath.Size = new System.Drawing.Size(87, 17);
-            this.lblPath.TabIndex = 6;
-            this.lblPath.Text = "Аудиофайл:";
-            // 
             // openFileDialog
             // 
             this.openFileDialog.Filter = "WAV аудиофайл (*.wav)|*.wav";
             // 
-            // inputPath
+            // inputChannels
             // 
-            this.inputPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.inputPath.Location = new System.Drawing.Point(204, 85);
-            this.inputPath.Name = "inputPath";
-            this.inputPath.Size = new System.Drawing.Size(258, 22);
-            this.inputPath.TabIndex = 7;
-            this.inputPath.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.inputPath.TextChanged += new System.EventHandler(this.inputPath_TextChanged);
+            this.inputChannels.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.channel,
+            this.path});
+            this.inputChannels.FullRowSelect = true;
+            this.inputChannels.GridLines = true;
+            this.inputChannels.Location = new System.Drawing.Point(12, 67);
+            this.inputChannels.Name = "inputChannels";
+            this.inputChannels.Size = new System.Drawing.Size(557, 352);
+            this.inputChannels.TabIndex = 5;
+            this.inputChannels.UseCompatibleStateImageBehavior = false;
+            this.inputChannels.View = System.Windows.Forms.View.Details;
             // 
-            // btnBrowse
+            // channel
             // 
-            this.btnBrowse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnBrowse.Location = new System.Drawing.Point(469, 82);
-            this.btnBrowse.Margin = new System.Windows.Forms.Padding(4);
-            this.btnBrowse.Name = "btnBrowse";
-            this.btnBrowse.Size = new System.Drawing.Size(100, 28);
-            this.btnBrowse.TabIndex = 8;
-            this.btnBrowse.Text = "Обзор";
-            this.btnBrowse.UseVisualStyleBackColor = true;
-            this.btnBrowse.Click += new System.EventHandler(this.btnBrowse_Click);
+            this.channel.Text = "Канал";
+            this.channel.Width = 173;
             // 
-            // inputChanel
+            // path
             // 
-            this.inputChanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.inputChanel.Location = new System.Drawing.Point(204, 54);
-            this.inputChanel.Maximum = new decimal(new int[] {
-            65535,
-            0,
-            0,
-            0});
-            this.inputChanel.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            -2147483648});
-            this.inputChanel.Name = "inputChanel";
-            this.inputChanel.Size = new System.Drawing.Size(365, 22);
-            this.inputChanel.TabIndex = 9;
-            this.inputChanel.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.inputChanel.ValueChanged += new System.EventHandler(this.inputChanel_ValueChanged);
+            this.path.Text = "Аудиофайл";
+            this.path.Width = 378;
+            // 
+            // lblLine
+            // 
+            this.lblLine.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.lblLine.Location = new System.Drawing.Point(11, 456);
+            this.lblLine.Name = "lblLine";
+            this.lblLine.Size = new System.Drawing.Size(558, 2);
+            this.lblLine.TabIndex = 6;
+            // 
+            // btnAdd
+            // 
+            this.btnAdd.Location = new System.Drawing.Point(469, 425);
+            this.btnAdd.Name = "btnAdd";
+            this.btnAdd.Size = new System.Drawing.Size(100, 28);
+            this.btnAdd.TabIndex = 7;
+            this.btnAdd.Text = "Добавить";
+            this.btnAdd.UseVisualStyleBackColor = true;
+            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
+            // 
+            // btnRemove
+            // 
+            this.btnRemove.Location = new System.Drawing.Point(361, 425);
+            this.btnRemove.Name = "btnRemove";
+            this.btnRemove.Size = new System.Drawing.Size(99, 28);
+            this.btnRemove.TabIndex = 8;
+            this.btnRemove.Text = "Удалить";
+            this.btnRemove.UseVisualStyleBackColor = true;
+            this.btnRemove.Click += new System.EventHandler(this.btnRemove_Click);
             // 
             // FrmAlarmConfig
             // 
@@ -200,12 +190,11 @@ namespace Scada.Server.Modules.Alarm
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnClose;
-            this.ClientSize = new System.Drawing.Size(582, 203);
-            this.Controls.Add(this.inputChanel);
-            this.Controls.Add(this.btnBrowse);
-            this.Controls.Add(this.inputPath);
-            this.Controls.Add(this.lblPath);
-            this.Controls.Add(this.lblChanel);
+            this.ClientSize = new System.Drawing.Size(582, 503);
+            this.Controls.Add(this.btnRemove);
+            this.Controls.Add(this.btnAdd);
+            this.Controls.Add(this.lblLine);
+            this.Controls.Add(this.inputChannels);
             this.Controls.Add(this.linkAuthor);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnSave);
@@ -216,13 +205,13 @@ namespace Scada.Server.Modules.Alarm
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(600, 250);
             this.Name = "FrmAlarmConfig";
+            this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Серверный модуль звуковой сигнализации";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmAlarmConfig_FormClosing);
             this.Load += new System.EventHandler(this.FrmAlarmConfig_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.inputChanel)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -235,11 +224,12 @@ namespace Scada.Server.Modules.Alarm
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.LinkLabel linkAuthor;
-        private System.Windows.Forms.Label lblChanel;
-        private System.Windows.Forms.Label lblPath;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
-        private System.Windows.Forms.TextBox inputPath;
-        private System.Windows.Forms.Button btnBrowse;
-        private System.Windows.Forms.NumericUpDown inputChanel;
+        private System.Windows.Forms.ListView inputChannels;
+        private System.Windows.Forms.ColumnHeader channel;
+        private System.Windows.Forms.ColumnHeader path;
+        private System.Windows.Forms.Label lblLine;
+        private System.Windows.Forms.Button btnAdd;
+        private System.Windows.Forms.Button btnRemove;
     }
 }

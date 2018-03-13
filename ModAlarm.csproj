@@ -55,8 +55,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FrmAddAlarm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmAddAlarm.Designer.cs">
+      <DependentUpon>FrmAddAlarm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Config.cs" />
-    <Compile Include="FrmAlarmConfig.cs" />
+    <Compile Include="FrmAlarmConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="FrmAlarmConfig.Designer.cs">
       <DependentUpon>FrmAlarmConfig.cs</DependentUpon>
     </Compile>
@@ -71,6 +79,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="FrmAddAlarm.resx">
+      <DependentUpon>FrmAddAlarm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FrmAlarmConfig.resx">
       <DependentUpon>FrmAlarmConfig.cs</DependentUpon>
     </EmbeddedResource>
@@ -86,6 +97,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Lang\ModAlarm.en-GB.xml" />
+    <Content Include="ModAlarm.en-Gb.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

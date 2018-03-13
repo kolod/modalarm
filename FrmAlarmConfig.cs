@@ -29,6 +29,7 @@ using System;
 using System.IO;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Collections.Generic;
 
 namespace Scada.Server.Modules.Alarm
 {
@@ -123,8 +124,12 @@ namespace Scada.Server.Modules.Alarm
         private void ConfigToControls()
         {
             changing = true;
-            //inputChanel.SetValue(config.ChanelNumber);
-            //inputPath.Text = config.SoundFileName;
+            foreach (KeyValuePair<int, string> channel in config.channels)
+            {
+                ListViewItem item = new ListViewItem(channel.Key.ToString());
+                item.SubItems.Add(channel.Value);
+                inputChannels.Items.Add(item);
+            }
             changing = false;
         }
 
@@ -165,35 +170,6 @@ namespace Scada.Server.Modules.Alarm
         }
 
 
-        private void btnBrowse_Click(object sender, EventArgs e)
-        {
-            if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            {
-                inputPath.Text = openFileDialog.FileName;
-            }
-        }
-
-
-        private void inputChanel_ValueChanged(object sender, EventArgs e)
-        {
-            if (!changing)
-            {
-                //config.ChanelNumber = Decimal.ToInt32(inputChanel.Value);
-                Modified = true;
-            }
-        }
-
-
-        private void inputPath_TextChanged(object sender, EventArgs e)
-        {
-            if (!changing)
-            {
-                //config.SoundFileName = inputPath.Text;
-                Modified = true;
-            }
-        }
-
-
         private void btnSave_Click(object sender, EventArgs e)
         {
             // сохранение конфигурации модуля
@@ -229,6 +205,39 @@ namespace Scada.Server.Modules.Alarm
                     default:
                         e.Cancel = true;
                         break;
+                }
+            }
+        }
+
+        private void btnAdd_Click(object sender, EventArgs e)
+        {
+            if (!changing)
+            {
+                FrmAddAlarm dialog = new FrmAddAlarm(appDirs);
+
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    config.channels.Add(dialog.Channel, dialog.SoundFilePath);
+
+                    ListViewItem item = new ListViewItem(Convert.ToString(dialog.Channel));
+                    item.SubItems.Add(dialog.SoundFilePath);
+                    inputChannels.Items.Add(item);
+
+                    Modified = true;
+                }
+            }
+        }
+
+        private void btnRemove_Click(object sender, EventArgs e)
+        {
+            if (!changing)
+            {
+                foreach (ListViewItem item in inputChannels.SelectedItems)
+                {
+                    config.channels.Remove(Convert.ToInt32(item.SubItems[0].Text));
+                    inputChannels.Items.Remove(item);
+
+                    Modified = true;
                 }
             }
         }

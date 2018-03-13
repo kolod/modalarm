@@ -151,6 +151,10 @@ namespace Scada.Server.Modules
 
             if (config.Load(out errMsg))
             {
+                foreach (int channel in config.channels.Keys)
+                {
+                    lastState.Add(channel, false);
+                }
                 WriteInfo();
             }
             else
@@ -179,14 +183,42 @@ namespace Scada.Server.Modules
         /// <summary>
         /// Создать экземпляр ласса для воспроизведения файла
         /// </summary>
-        private void AddWaweOut(int channel)
+        private bool AddWaweOut(int channel)
         {
-            if (config.channels.ContainsKey(channel))
+            try
             {
-                WaveFileReader reader = new WaveFileReader(config.channels[channel]);
-                LoopStream loop = new LoopStream(reader);
-                waveOuts.Add(channel, new WaveOut());
-                waveOuts[channel].Init(loop);
+                if (waveOuts.ContainsKey(channel))
+                {
+                    log.WriteAction(string.Format("ContainsKey: {0}", channel));
+
+                    if (config.channels[channel] == null)
+                    {
+                        log.WriteAction(string.Format("Channel: {0}", channel));
+                        WaveFileReader reader = new WaveFileReader(config.channels[channel]);
+                        LoopStream loop = new LoopStream(reader);
+                        waveOuts[channel] = new WaveOut();
+                        waveOuts[channel].Init(loop);
+                        return true;
+                    }
+                    else return true;
+                }
+                else
+                {
+                    log.WriteAction(string.Format("Create: {0}", channel));
+
+                    WaveFileReader reader = new WaveFileReader(config.channels[channel]);
+                    LoopStream loop = new LoopStream(reader);
+                    waveOuts.Add(channel, new WaveOut());
+                    waveOuts[channel].Init(loop);
+                    return true;
+                }
+            }
+            catch(Exception ex)
+            {
+                log.WriteAction(string.Format(Localization.UseRussian ?
+                    "Ошибка при создании класса waveOut для '{0}': {1}" :
+                    "Error while creating of the waveOut class for '{0}': {1}", config.channels[channel], ex.Message));
+                return false;
             }
         }
 
@@ -198,9 +230,7 @@ namespace Scada.Server.Modules
         {
             try
             {
-                if (waveOuts.ContainsKey(channel) == false) AddWaweOut(channel);
-                if (waveOuts[channel] == null) AddWaweOut(channel);
-                if (waveOuts[channel] != null) waveOuts[channel].Play();
+                if (AddWaweOut(channel)) waveOuts[channel].Play();
             }
             catch (Exception ex)
             {
@@ -220,9 +250,10 @@ namespace Scada.Server.Modules
             {
                 if (waveOuts.ContainsKey(channel) && (waveOuts[channel] != null))
                 {
+                    log.WriteAction(string.Format("Delete: {0}", channel));
                     waveOuts[channel].Stop();
                     waveOuts[channel].Dispose();
-                    waveOuts[channel] = null;
+                    waveOuts.Remove(channel);
                 }
             }
             catch (Exception ex)
@@ -250,13 +281,11 @@ namespace Scada.Server.Modules
                         if (curSrez.GetCnlData(channel, out cnlData))
                         {
                             bool state = cnlData.Val > 0;
-
-                            if ((lastState.ContainsKey(channel)) && (lastState[channel] != state))
+                            if (lastState[channel] != state)
                             {
+                                lastState[channel] = state;
                                 if (state) StartAlarm(channel); else StopAlarm(channel);
                             }
-
-                            lastState[channel] = state;
                         }
                     }
                 }
