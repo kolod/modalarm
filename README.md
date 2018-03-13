@@ -1,5 +1,5 @@
 ﻿# ModAlarm
-Server module for the Rapid SCADA.  
+Server module for the [Rapid SCADA](https://rapidscada.org/).  
 Allows you to output the alarm sound.
 
 Tested on Windows 7/10.
