@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2017-2018 Alexandr Kolodkin
+ * Copyright 2017-2018 Alexandr Kolodkin <alexandr.kolodkin@gmail.com>
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -144,7 +144,15 @@ namespace Scada.Server.Modules.Alarm
             if (!Localization.UseRussian)
             {
                 if (Localization.LoadDictionaries(appDirs.LangDir, "ModAlarm", out errMsg))
+                {
                     Translator.TranslateForm(this, "Scada.Server.Modules.Alarm.FrmAlarmConfig");
+
+                    inputChannels.Columns[0].Text = Localization.Dictionaries["Scada.Server.Modules.Alarm.FrmAlarmConfig"]
+                        .GetPhrase("columnChannel", inputChannels.Columns[0].Text);
+
+                    inputChannels.Columns[1].Text = Localization.Dictionaries["Scada.Server.Modules.Alarm.FrmAlarmConfig"]
+                        .GetPhrase("columnSoundFile", inputChannels.Columns[0].Text);
+                }
                 else
                     ScadaUiUtils.ShowError(errMsg);
             }

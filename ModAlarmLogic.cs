@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2017-2018 Alexandr Kolodkin
+ * Copyright 2017-2018 Alexandr Kolodkin <alexandr.kolodkin@gmail.com>
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@
  * Created  : 2017
  * Modified : 2018
  */
- 
+
 using Scada.Data.Tables;
 using System.Collections.Generic;
 using System;

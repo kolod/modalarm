@@ -2,6 +2,8 @@
 Server module for the [Rapid SCADA](https://rapidscada.org/).  
 Allows you to output the alarm sound.
 
+The alarm sound plays only on the server.
+
 Tested on Windows 7/10.
 Linux not supported.
 

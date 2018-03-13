@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2017-2018 Alexandr Kolodkin
+ * Copyright 2017-2018 Alexandr Kolodkin <alexandr.kolodkin@gmail.com>
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -81,7 +81,12 @@ namespace Scada.Server.Modules
             if (!Localization.UseRussian)
             {
                 if (Localization.LoadDictionaries(appDirs.LangDir, "ModAlarm", out errMsg))
+                {
                     Translator.TranslateForm(this, "Scada.Server.Modules.Alarm.FrmAddAlarm");
+
+                    openFileDialog.Filter = Localization.Dictionaries["Scada.Server.Modules.Alarm.FrmAddAlarm"]
+                        .GetPhrase("openFileDialog.Filter", openFileDialog.Filter);
+                }
                 else
                     ScadaUiUtils.ShowError(errMsg);
             }
