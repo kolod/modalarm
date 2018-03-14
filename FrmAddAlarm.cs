@@ -34,6 +34,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using NAudio.Wave;
 
 namespace Scada.Server.Modules
 {
@@ -42,7 +43,7 @@ namespace Scada.Server.Modules
         private AppDirs appDirs;       // директории приложения
         public string SoundFilePath;
         public int Channel;
-
+        private WaveOut waveOut = null;
 
         public FrmAddAlarm(AppDirs appDirs)
         {
@@ -89,6 +90,48 @@ namespace Scada.Server.Modules
                 }
                 else
                     ScadaUiUtils.ShowError(errMsg);
+            }
+        }
+
+        private void btnTest_CheckedChanged(object sender, EventArgs e)
+        {
+            if (btnTest.Checked)
+            {
+                try
+                {
+                    WaveFileReader reader = new WaveFileReader(inputPath.Text);
+                    LoopStream loop = new LoopStream(reader);
+                    waveOut = new WaveOut();
+                    waveOut.Init(loop);
+                    waveOut.Play();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Error");
+                }
+            }
+            else
+            {
+                try
+                {
+                    waveOut.Stop();
+                    waveOut.Dispose();
+                    waveOut = null;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Error");
+                }
+            }
+        }
+
+        private void FrmAddAlarm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (waveOut != null)
+            {
+                waveOut.Stop();
+                waveOut.Dispose();
+                waveOut = null;
             }
         }
     }

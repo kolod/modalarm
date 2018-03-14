@@ -99,6 +99,11 @@ namespace Scada.Server.Modules
                         sbInfo
                             .Append("Канал: ").Append(channel.Key)
                             .Append(", Аудио файл: ").AppendLine(channel.Value);
+
+                        if (!File.Exists(channel.Value))
+                        {
+                            log.WriteAction(string.Format("Ошибка файл '{0}' не найден.", channel.Value));
+                        }
                     }
                 }
                 else
@@ -113,6 +118,11 @@ namespace Scada.Server.Modules
                         sbInfo
                             .Append("Channel: ").Append(channel.Key)
                             .Append(", Sound file: ").AppendLine(channel.Value);
+
+                        if (!File.Exists(channel.Value))
+                        {
+                            log.WriteAction(string.Format("Error file '{0}' not found.", channel.Value));
+                        }
                     }
                 }
 
@@ -259,8 +269,8 @@ namespace Scada.Server.Modules
             catch (Exception ex)
             {
                 log.WriteAction(string.Format(Localization.UseRussian ?
-                    "Ошибка при остановке воспроизведения аудиофайла {0}: {1}" :
-                    "Error while stoping audio file {0}: {1}", config.channels[channel], ex.Message));
+                    "Ошибка при остановке воспроизведения аудиофайла '{0}': {1}" :
+                    "Error while stoping audio file '{0}': {1}", config.channels[channel], ex.Message));
             }
         }
 
@@ -280,7 +290,7 @@ namespace Scada.Server.Modules
 
                         if (curSrez.GetCnlData(channel, out cnlData))
                         {
-                            bool state = cnlData.Val > 0;
+                            bool state = Math.Abs(cnlData.Val) > 0.001;
                             if (lastState[channel] != state)
                             {
                                 lastState[channel] = state;

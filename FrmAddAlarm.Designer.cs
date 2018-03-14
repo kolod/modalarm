@@ -61,13 +61,14 @@ namespace Scada.Server.Modules
             this.inputPath = new System.Windows.Forms.TextBox();
             this.btnBrowse = new System.Windows.Forms.Button();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.btnTest = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.inputChannel)).BeginInit();
             this.SuspendLayout();
             // 
             // btnOk
             // 
             this.btnOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnOk.Location = new System.Drawing.Point(121, 119);
+            this.btnOk.Location = new System.Drawing.Point(121, 131);
             this.btnOk.Name = "btnOk";
             this.btnOk.Size = new System.Drawing.Size(100, 28);
             this.btnOk.TabIndex = 0;
@@ -79,7 +80,7 @@ namespace Scada.Server.Modules
             // 
             this.btnCansel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnCansel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCansel.Location = new System.Drawing.Point(15, 119);
+            this.btnCansel.Location = new System.Drawing.Point(15, 131);
             this.btnCansel.Name = "btnCansel";
             this.btnCansel.Size = new System.Drawing.Size(100, 28);
             this.btnCansel.TabIndex = 1;
@@ -106,7 +107,7 @@ namespace Scada.Server.Modules
             0,
             0});
             this.inputChannel.Name = "inputChannel";
-            this.inputChannel.Size = new System.Drawing.Size(372, 22);
+            this.inputChannel.Size = new System.Drawing.Size(457, 22);
             this.inputChannel.TabIndex = 3;
             this.inputChannel.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.inputChannel.ValueChanged += new System.EventHandler(this.inputChannel_ValueChanged);
@@ -126,7 +127,7 @@ namespace Scada.Server.Modules
             | System.Windows.Forms.AnchorStyles.Right)));
             this.inputPath.Location = new System.Drawing.Point(15, 76);
             this.inputPath.Name = "inputPath";
-            this.inputPath.Size = new System.Drawing.Size(372, 22);
+            this.inputPath.Size = new System.Drawing.Size(457, 22);
             this.inputPath.TabIndex = 5;
             this.inputPath.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.inputPath.TextChanged += new System.EventHandler(this.inputPath_TextChanged);
@@ -134,7 +135,7 @@ namespace Scada.Server.Modules
             // btnBrowse
             // 
             this.btnBrowse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnBrowse.Location = new System.Drawing.Point(287, 119);
+            this.btnBrowse.Location = new System.Drawing.Point(372, 131);
             this.btnBrowse.Name = "btnBrowse";
             this.btnBrowse.Size = new System.Drawing.Size(100, 28);
             this.btnBrowse.TabIndex = 6;
@@ -146,13 +147,27 @@ namespace Scada.Server.Modules
             // 
             this.openFileDialog.Filter = "WAV аудио файл|*.wav";
             // 
+            // btnTest
+            // 
+            this.btnTest.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnTest.Appearance = System.Windows.Forms.Appearance.Button;
+            this.btnTest.Location = new System.Drawing.Point(266, 131);
+            this.btnTest.Name = "btnTest";
+            this.btnTest.Size = new System.Drawing.Size(100, 28);
+            this.btnTest.TabIndex = 7;
+            this.btnTest.Text = "Проверка";
+            this.btnTest.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.btnTest.UseVisualStyleBackColor = true;
+            this.btnTest.CheckedChanged += new System.EventHandler(this.btnTest_CheckedChanged);
+            // 
             // FrmAddAlarm
             // 
             this.AcceptButton = this.btnOk;
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCansel;
-            this.ClientSize = new System.Drawing.Size(399, 159);
+            this.ClientSize = new System.Drawing.Size(484, 171);
+            this.Controls.Add(this.btnTest);
             this.Controls.Add(this.btnBrowse);
             this.Controls.Add(this.inputPath);
             this.Controls.Add(this.lblPath);
@@ -168,6 +183,7 @@ namespace Scada.Server.Modules
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Добавить аварию";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmAddAlarm_FormClosing);
             this.Load += new System.EventHandler(this.FrmAddAlarm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.inputChannel)).EndInit();
             this.ResumeLayout(false);
@@ -185,5 +201,6 @@ namespace Scada.Server.Modules
         private System.Windows.Forms.TextBox inputPath;
         private System.Windows.Forms.Button btnBrowse;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
+        private System.Windows.Forms.CheckBox btnTest;
     }
 }

@@ -20,6 +20,7 @@
     <Phrase key="btnOk">Ok</Phrase>
     <Phrase key="btnCansel">Cansel</Phrase>
     <Phrase key="btnBrowse">Browse</Phrase>
+    <Phrase key="btnTest">Test</Phrase>
     <Phrase key="openFileDialog.Filter">Waveform Audio File (*.wav)|*.wav</Phrase>
   </Dictionary>
 </ModAlarmDictionaries>
