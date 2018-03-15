@@ -41,6 +41,7 @@ namespace Scada.Server.Modules
             if (disposing && (components != null))
             {
                 components.Dispose();
+                waveOut.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -68,7 +69,7 @@ namespace Scada.Server.Modules
             // btnOk
             // 
             this.btnOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnOk.Location = new System.Drawing.Point(121, 131);
+            this.btnOk.Location = new System.Drawing.Point(121, 153);
             this.btnOk.Name = "btnOk";
             this.btnOk.Size = new System.Drawing.Size(100, 28);
             this.btnOk.TabIndex = 0;
@@ -80,7 +81,7 @@ namespace Scada.Server.Modules
             // 
             this.btnCansel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnCansel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCansel.Location = new System.Drawing.Point(15, 131);
+            this.btnCansel.Location = new System.Drawing.Point(15, 153);
             this.btnCansel.Name = "btnCansel";
             this.btnCansel.Size = new System.Drawing.Size(100, 28);
             this.btnCansel.TabIndex = 1;
@@ -107,7 +108,7 @@ namespace Scada.Server.Modules
             0,
             0});
             this.inputChannel.Name = "inputChannel";
-            this.inputChannel.Size = new System.Drawing.Size(457, 22);
+            this.inputChannel.Size = new System.Drawing.Size(472, 22);
             this.inputChannel.TabIndex = 3;
             this.inputChannel.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.inputChannel.ValueChanged += new System.EventHandler(this.inputChannel_ValueChanged);
@@ -127,7 +128,7 @@ namespace Scada.Server.Modules
             | System.Windows.Forms.AnchorStyles.Right)));
             this.inputPath.Location = new System.Drawing.Point(15, 76);
             this.inputPath.Name = "inputPath";
-            this.inputPath.Size = new System.Drawing.Size(457, 22);
+            this.inputPath.Size = new System.Drawing.Size(472, 22);
             this.inputPath.TabIndex = 5;
             this.inputPath.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.inputPath.TextChanged += new System.EventHandler(this.inputPath_TextChanged);
@@ -135,7 +136,7 @@ namespace Scada.Server.Modules
             // btnBrowse
             // 
             this.btnBrowse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnBrowse.Location = new System.Drawing.Point(372, 131);
+            this.btnBrowse.Location = new System.Drawing.Point(387, 153);
             this.btnBrowse.Name = "btnBrowse";
             this.btnBrowse.Size = new System.Drawing.Size(100, 28);
             this.btnBrowse.TabIndex = 6;
@@ -151,7 +152,7 @@ namespace Scada.Server.Modules
             // 
             this.btnTest.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnTest.Appearance = System.Windows.Forms.Appearance.Button;
-            this.btnTest.Location = new System.Drawing.Point(266, 131);
+            this.btnTest.Location = new System.Drawing.Point(281, 153);
             this.btnTest.Name = "btnTest";
             this.btnTest.Size = new System.Drawing.Size(100, 28);
             this.btnTest.TabIndex = 7;
@@ -166,7 +167,7 @@ namespace Scada.Server.Modules
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCansel;
-            this.ClientSize = new System.Drawing.Size(484, 171);
+            this.ClientSize = new System.Drawing.Size(499, 193);
             this.Controls.Add(this.btnTest);
             this.Controls.Add(this.btnBrowse);
             this.Controls.Add(this.inputPath);
@@ -175,9 +176,9 @@ namespace Scada.Server.Modules
             this.Controls.Add(this.lblChannel);
             this.Controls.Add(this.btnCansel);
             this.Controls.Add(this.btnOk);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(500, 240);
             this.Name = "FrmAddAlarm";
             this.ShowIcon = false;
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
@@ -185,6 +186,7 @@ namespace Scada.Server.Modules
             this.Text = "Добавить аварию";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmAddAlarm_FormClosing);
             this.Load += new System.EventHandler(this.FrmAddAlarm_Load);
+            this.Shown += new System.EventHandler(this.FrmAddAlarm_Shown);
             ((System.ComponentModel.ISupportInitialize)(this.inputChannel)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

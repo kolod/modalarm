@@ -27,6 +27,7 @@
 using Scada.Client;
 using Scada.UI;
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -40,10 +41,12 @@ namespace Scada.Server.Modules
 {
     public partial class FrmAddAlarm : Form
     {
-        private AppDirs appDirs;       // директории приложения
         public string SoundFilePath;
         public int Channel;
+
+        private AppDirs appDirs;         // директории приложения
         private WaveOut waveOut = null;
+
 
         public FrmAddAlarm(AppDirs appDirs)
         {
@@ -62,11 +65,17 @@ namespace Scada.Server.Modules
         private void inputChannel_ValueChanged(object sender, EventArgs e)
         {
             Channel = Decimal.ToInt32(inputChannel.Value);
+
+            // обновление состояние кнопки ОK
+            UpdateOkButton();
         }
 
         private void inputPath_TextChanged(object sender, EventArgs e)
         {
             SoundFilePath = inputPath.Text;
+
+            // обновление состояние кнопки ОK
+            UpdateOkButton();
         }
 
         private void btnOk_Click(object sender, EventArgs e)
@@ -133,6 +142,21 @@ namespace Scada.Server.Modules
                 waveOut.Dispose();
                 waveOut = null;
             }
+        }
+
+        private void UpdateOkButton()
+        {
+            btnOk.Enabled = (File.Exists(SoundFilePath) && (Channel >= 0) && (Channel <= 65535));
+        }
+
+        private void FrmAddAlarm_Shown(object sender, EventArgs e)
+        {
+            // задание начальных значений
+            inputChannel.Value = Channel;
+            inputPath.Text = SoundFilePath;
+
+            // обновление состояние кнопки ОK
+            UpdateOkButton();
         }
     }
 }

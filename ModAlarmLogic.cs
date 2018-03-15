@@ -199,11 +199,8 @@ namespace Scada.Server.Modules
             {
                 if (waveOuts.ContainsKey(channel))
                 {
-                    log.WriteAction(string.Format("ContainsKey: {0}", channel));
-
                     if (config.channels[channel] == null)
                     {
-                        log.WriteAction(string.Format("Channel: {0}", channel));
                         WaveFileReader reader = new WaveFileReader(config.channels[channel]);
                         LoopStream loop = new LoopStream(reader);
                         waveOuts[channel] = new WaveOut();
@@ -214,8 +211,6 @@ namespace Scada.Server.Modules
                 }
                 else
                 {
-                    log.WriteAction(string.Format("Create: {0}", channel));
-
                     WaveFileReader reader = new WaveFileReader(config.channels[channel]);
                     LoopStream loop = new LoopStream(reader);
                     waveOuts.Add(channel, new WaveOut());

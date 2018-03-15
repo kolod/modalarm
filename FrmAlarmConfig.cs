@@ -47,6 +47,10 @@ namespace Scada.Server.Modules.Alarm
         private bool modified;         // признак изменения конфигурации
         private bool changing;         // происходит изменение значений элементов управления
 
+        private int lastChannel = 0;   // последний добавленный канал
+        private string lastPath = "";  // последний добавленный аудиофайл
+
+        private string msg;            // сообщение
 
         /// <summary>
         /// Конструктор, ограничивающий создание формы без параметров
@@ -90,7 +94,7 @@ namespace Scada.Server.Modules.Alarm
             frmAlarmConfig.serverComm = serverComm;
             frmAlarmConfig.ShowDialog();
         }
-        
+
 
         /// <summary>
         /// Сохранить конфигурацию модуля
@@ -152,6 +156,9 @@ namespace Scada.Server.Modules.Alarm
 
                     inputChannels.Columns[1].Text = Localization.Dictionaries["Scada.Server.Modules.Alarm.FrmAlarmConfig"]
                         .GetPhrase("columnSoundFile", inputChannels.Columns[0].Text);
+
+                    msg = Localization.Dictionaries["Scada.Server.Modules.Alarm.FrmAlarmConfig"]
+                        .GetPhrase("message", "Данный канал уже исползуется. Именить его?");
                 }
                 else
                     ScadaUiUtils.ShowError(errMsg);
@@ -223,6 +230,9 @@ namespace Scada.Server.Modules.Alarm
             {
                 FrmAddAlarm dialog = new FrmAddAlarm(appDirs);
 
+                dialog.SoundFilePath = lastPath;
+                dialog.Channel = lastChannel + 1;
+
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
                     config.channels.Add(dialog.Channel, dialog.SoundFilePath);
@@ -232,6 +242,8 @@ namespace Scada.Server.Modules.Alarm
                     inputChannels.Items.Add(item);
 
                     Modified = true;
+                    lastPath = dialog.SoundFilePath;
+                    lastChannel = dialog.Channel;
                 }
             }
         }
