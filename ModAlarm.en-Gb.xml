@@ -12,6 +12,8 @@
     <Phrase key="btnBrowse">Browse</Phrase>
     <Phrase key="columnChannel">Channel</Phrase>
     <Phrase key="columnSoundFile">Sound file</Phrase>
+    <Phrase key="msgAlreadyExists">This channel is already in use. Change it?</Phrase>
+    <Phrase key="msgWarning">Warning</Phrase>
   </Dictionary>
   <Dictionary key="Scada.Server.Modules.Alarm.FrmAddAlarm">
     <Phrase key="this">Add Alarm</Phrase>

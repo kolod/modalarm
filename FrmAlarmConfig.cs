@@ -26,6 +26,7 @@
 using Scada.Client;
 using Scada.UI;
 using System;
+using System.Linq;
 using System.IO;
 using System.Drawing;
 using System.Windows.Forms;
@@ -39,18 +40,19 @@ namespace Scada.Server.Modules.Alarm
     /// </summary>
     public partial class FrmAlarmConfig : Form
     {
-        private AppDirs appDirs;       // директории приложения
-        private ServerComm serverComm; // объект для обмена данными со SCADA-Сервером
+        private AppDirs appDirs;         // директории приложения
+        private ServerComm serverComm;   // объект для обмена данными со SCADA-Сервером
 
-        private Config config;         // конфигурация модуля
-        private Config configCopy;     // копия конфигурации модуля для реализации отмены изменений
-        private bool modified;         // признак изменения конфигурации
-        private bool changing;         // происходит изменение значений элементов управления
+        private Config config;           // конфигурация модуля
+        private Config configCopy;       // копия конфигурации модуля для реализации отмены изменений
+        private bool modified;           // признак изменения конфигурации
+        private bool changing;           // происходит изменение значений элементов управления
 
-        private int lastChannel = 0;   // последний добавленный канал
-        private string lastPath = "";  // последний добавленный аудиофайл
+        private int lastChannel = 0;     // последний добавленный канал
+        private string lastPath = "";    // последний добавленный аудиофайл
 
-        private string msg;            // сообщение
+        private string msgAlreadyExists; // сообщение "Данный канал уже исползуется. Именить его?"
+        private string msgWarning;       // заголовок сообщения "Предупреждение"
 
         /// <summary>
         /// Конструктор, ограничивающий создание формы без параметров
@@ -128,6 +130,9 @@ namespace Scada.Server.Modules.Alarm
         private void ConfigToControls()
         {
             changing = true;
+
+            inputChannels.Items.Clear();
+
             foreach (KeyValuePair<int, string> channel in config.channels)
             {
                 ListViewItem item = new ListViewItem(channel.Key.ToString());
@@ -157,8 +162,11 @@ namespace Scada.Server.Modules.Alarm
                     inputChannels.Columns[1].Text = Localization.Dictionaries["Scada.Server.Modules.Alarm.FrmAlarmConfig"]
                         .GetPhrase("columnSoundFile", inputChannels.Columns[0].Text);
 
-                    msg = Localization.Dictionaries["Scada.Server.Modules.Alarm.FrmAlarmConfig"]
-                        .GetPhrase("message", "Данный канал уже исползуется. Именить его?");
+                    msgAlreadyExists = Localization.Dictionaries["Scada.Server.Modules.Alarm.FrmAlarmConfig"]
+                        .GetPhrase("msgAlreadyExists", "Данный канал уже исползуется. Изменить его?");
+
+                    msgWarning = Localization.Dictionaries["Scada.Server.Modules.Alarm.FrmAlarmConfig"]
+                        .GetPhrase("msgWarning", "Предупреждение");
                 }
                 else
                     ScadaUiUtils.ShowError(errMsg);
@@ -173,6 +181,10 @@ namespace Scada.Server.Modules.Alarm
 
             // отображение конфигурации
             ConfigToControls();
+
+            // последний добавленный канал
+            lastChannel = config.channels.Last().Key;
+            lastPath = config.channels.Last().Value;
 
             // снятие признака изменения конфигурации
             Modified = false;
@@ -233,17 +245,34 @@ namespace Scada.Server.Modules.Alarm
                 dialog.SoundFilePath = lastPath;
                 dialog.Channel = lastChannel + 1;
 
-                if (dialog.ShowDialog() == DialogResult.OK)
+                while (true) // цикл, пока не получим условие для выхода
                 {
-                    config.channels.Add(dialog.Channel, dialog.SoundFilePath);
+                    if (dialog.ShowDialog() == DialogResult.OK)
+                    {
+                        if (config.channels.ContainsKey(dialog.Channel))
+                        {
+                            switch (MessageBox.Show(msgAlreadyExists, msgWarning, MessageBoxButtons.YesNoCancel))
+                            {
+                                case DialogResult.No:
+                                    continue;
 
-                    ListViewItem item = new ListViewItem(Convert.ToString(dialog.Channel));
-                    item.SubItems.Add(dialog.SoundFilePath);
-                    inputChannels.Items.Add(item);
+                                case DialogResult.Cancel:
+                                    return;
 
-                    Modified = true;
-                    lastPath = dialog.SoundFilePath;
-                    lastChannel = dialog.Channel;
+                                case DialogResult.Yes:
+                                    config.channels.Remove(dialog.Channel);
+                                    break;
+                            }
+                        }
+
+                        config.channels.Add(dialog.Channel, dialog.SoundFilePath);
+                        lastPath = dialog.SoundFilePath;
+                        lastChannel = dialog.Channel;
+                        Modified = true;
+
+                        ConfigToControls();
+                        return;
+                    }
                 }
             }
         }
