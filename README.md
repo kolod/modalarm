@@ -15,6 +15,9 @@ Enable ModAlarm on the modules tab.
 ### Screenshot
 ![ModAlarm screenshot](https://github.com/kolod/modalarm/raw/master/screenshot.png)
 
+### Notes
+For the module to work, it is necessary to have at least one channel with the type "Dedicated TI" in the project.
+
 ### Usage example:
 ![Administrator screenshot](https://github.com/kolod/modalarm/raw/master/screenshot-setup.png)
 

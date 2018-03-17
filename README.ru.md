@@ -14,6 +14,9 @@
 ### Скриншот
 ![ModAlarm screenshot](https://github.com/kolod/modalarm/raw/master/screenshot.ru.png)
 
+### Примечания
+Для работы модуля, необходимо наличие хотя бы одного канала с типом "Дорасчётный ТИ" в проекте.
+
 ### Пример использования:
 ![Administrator screenshot](https://github.com/kolod/modalarm/raw/master/screenshot-setup.ru.png)
 
