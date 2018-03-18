@@ -4,7 +4,7 @@ Allows you to output the alarm sound.
 
 The alarm sound plays only on the server.
 
-Tested on Windows 7/10.
+Tested on Windows 7/8.1/10.
 Linux not supported.
 
 ### Install
