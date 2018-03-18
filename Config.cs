@@ -82,6 +82,23 @@ namespace Scada.Server.Modules
             channels.Clear();
         }
 
+
+        /// <summary>
+        /// Добавить аварию
+        /// </summary>
+        public bool AddChannel(int channel, string path)
+        {
+            if (channel < 0) return false;
+            if (channel > 65535) return false;
+            if (path == "") return false;
+            if (!File.Exists(path)) return false;
+            if (channels.ContainsKey(channel)) return false;
+
+            channels.Add(channel, path);
+            return true;
+        }
+
+
         /// <summary>
         /// Загрузить конфигурацию модуля
         /// </summary>
@@ -91,24 +108,25 @@ namespace Scada.Server.Modules
 
             try
             {
+                errMsg = "";
+
                 XmlDocument xmlDoc = new XmlDocument();
                 xmlDoc.Load(fileName);
-
                 XmlNode root = xmlDoc.DocumentElement;
-                XmlNodeList alerts = root.ChildNodes;
 
-                foreach (XmlNode alert in alerts)
+                foreach (XmlNode alert in root.SelectNodes("Alarm"))
                 {
-                    int channel = alert.GetChildAsInt("Channel");
-                    string soundFileName = alert.GetChildAsString("Sound");
+                    int channel = alert.GetChildAsInt("Channel", -1);
+                    string soundFileName = alert.GetChildAsString("Sound", "");
 
-                    if (channels.ContainsKey(channel) == false)
-                    {
-                        channels.Add(channel, soundFileName);
-                    }
+                    AddChannel(channel, soundFileName);
                 }
 
-                errMsg = "";
+                // Конвертация настроек модуля версии 1.1 и ниже
+                int oldChannel = root.GetChildAsInt("Chanel", -1);
+                string oldSound = root.GetChildAsString("Sound", "");
+                if (AddChannel(oldChannel, oldSound)) Save(out errMsg);
+
                 return true;
             }
             catch (FileNotFoundException ex)

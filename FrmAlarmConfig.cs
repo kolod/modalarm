@@ -265,12 +265,14 @@ namespace Scada.Server.Modules.Alarm
                             }
                         }
 
-                        config.channels.Add(dialog.Channel, dialog.SoundFilePath);
-                        lastPath = dialog.SoundFilePath;
-                        lastChannel = dialog.Channel;
-                        Modified = true;
+                        if (config.AddChannel(dialog.Channel, dialog.SoundFilePath))
+                        {
+                            lastPath = dialog.SoundFilePath;
+                            lastChannel = dialog.Channel;
+                            Modified = true;
+                            ConfigToControls();
+                        }
 
-                        ConfigToControls();
                         return;
                     }
                 }
