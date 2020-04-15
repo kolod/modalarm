@@ -38,10 +38,9 @@
     <Reference Include="Log">
       <HintPath>..\scada\ScadaServer\ScadaServer\ScadaServerCommon\bin\Release\Log.dll</HintPath>
     </Reference>
-    <Reference Include="NAudio, Version=1.8.4.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>C:\Users\alexa\OneDrive\Документы\Visual Studio 2017\Projects\NAudio\NAudio\bin\Release\NAudio.dll</HintPath>
+    <Reference Include="NAudio, Version=1.10.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <Private>True</Private>
+      <HintPath>..\NAudio\NAudio\bin\Release\NAudio.dll</HintPath>
     </Reference>
     <Reference Include="ScadaCommCommon">
       <HintPath>..\scada\ScadaComm\ScadaComm\ScadaCommCommon\bin\Release\ScadaCommCommon.dll</HintPath>

@@ -183,7 +183,7 @@ namespace Scada.Server.Modules
             this.ShowIcon = false;
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Изменить аварию";
+            this.Text = "Добавить аварию";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmAddAlarm_FormClosing);
             this.Load += new System.EventHandler(this.FrmAddAlarm_Load);
             this.Shown += new System.EventHandler(this.FrmAddAlarm_Shown);

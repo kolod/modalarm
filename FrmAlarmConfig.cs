@@ -31,6 +31,7 @@ using System.IO;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace Scada.Server.Modules.Alarm
 {
@@ -53,6 +54,17 @@ namespace Scada.Server.Modules.Alarm
 
         private string msgAlreadyExists; // сообщение "Данный канал уже исползуется. Именить его?"
         private string msgWarning;       // заголовок сообщения "Предупреждение"
+
+        AppDomain currentDomain = AppDomain.CurrentDomain;
+
+        static Assembly LoadFromSameFolder(object sender, ResolveEventArgs args)
+        {
+            string folderPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            string assemblyPath = Path.Combine(folderPath, new AssemblyName(args.Name).Name + ".dll");
+            if (!File.Exists(assemblyPath)) return null;
+            Assembly assembly = Assembly.LoadFrom(assemblyPath);
+            return assembly;
+        }
 
         /// <summary>
         /// Конструктор, ограничивающий создание формы без параметров
@@ -148,6 +160,8 @@ namespace Scada.Server.Modules.Alarm
         /// </summary>
         private void FrmAlarmConfig_Load(object sender, EventArgs e)
         {
+            currentDomain.AssemblyResolve += new ResolveEventHandler(LoadFromSameFolder);
+
             // локализация модуля
             string errMsg;
             if (!Localization.UseRussian)
