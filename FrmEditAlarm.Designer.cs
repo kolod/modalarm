@@ -25,7 +25,7 @@
 
 namespace Scada.Server.Modules
 {
-    partial class FrmAddAlarm
+    partial class FrmEditAlarm
     {
         /// <summary>
         /// Required designer variable.
@@ -99,7 +99,7 @@ namespace Scada.Server.Modules
             // 
             // inputChannel
             // 
-            this.inputChannel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.inputChannel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.inputChannel.Location = new System.Drawing.Point(15, 29);
             this.inputChannel.Maximum = new decimal(new int[] {
@@ -124,7 +124,7 @@ namespace Scada.Server.Modules
             // 
             // inputPath
             // 
-            this.inputPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.inputPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.inputPath.Location = new System.Drawing.Point(15, 76);
             this.inputPath.Name = "inputPath";
@@ -183,7 +183,7 @@ namespace Scada.Server.Modules
             this.ShowIcon = false;
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Изменить аварию";
+            this.Text = "Добавить аварию";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmAddAlarm_FormClosing);
             this.Load += new System.EventHandler(this.FrmAddAlarm_Load);
             this.Shown += new System.EventHandler(this.FrmAddAlarm_Shown);

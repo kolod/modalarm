@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2017-2018 Alexandr Kolodkin <alexandr.kolodkin@gmail.com>
+ * Copyright 2017-2020 Oleksandr Kolodkin <alexandr.kolodkin@gmail.com>
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,13 @@
  * 
  * Product  : Rapid SCADA
  * Module   : ModAlarm
- * Summary  : Server module user interface
+ * Summary  : Module configuration
  * 
  * Author   : Alexandr Kolodkin
  * Created  : 2017
- * Modified : 2018
+ * Modified : 2020
  */
+
 
 using Scada.Server.Modules.Alarm;
 

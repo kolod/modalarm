@@ -3,7 +3,7 @@
   <Dictionary key="Scada.Server.Modules.Alarm.FrmAlarmConfig">
     <Phrase key="this">Server-side sound signaling module</Phrase>
     <Phrase key="lblInfo">The module plays the selected sound signal until the value of the specified channel is equal to 0.</Phrase>
-    <Phrase key="linkAuthor">Alexandr Kolodkin (c) 2017-2018</Phrase>
+    <Phrase key="linkAuthor">Oleksandr Kolodkin (c) 2017-2020</Phrase>
     <Phrase key="btnAdd">Add</Phrase>
     <Phrase key="btnRemove">Remove</Phrase>
     <Phrase key="btnSave">Save</Phrase>
@@ -17,6 +17,16 @@
   </Dictionary>
   <Dictionary key="Scada.Server.Modules.Alarm.FrmAddAlarm">
     <Phrase key="this">Add Alarm</Phrase>
+    <Phrase key="lblChannel">Input Channel Number:</Phrase>
+    <Phrase key="lblPath">Sound File:</Phrase>
+    <Phrase key="btnOk">Ok</Phrase>
+    <Phrase key="btnCansel">Cansel</Phrase>
+    <Phrase key="btnBrowse">Browse</Phrase>
+    <Phrase key="btnTest">Test</Phrase>
+    <Phrase key="openFileDialog.Filter">Waveform Audio File (*.wav)|*.wav</Phrase>
+  </Dictionary>
+  <Dictionary key="Scada.Server.Modules.Alarm.FrmAddAlarm">
+    <Phrase key="this">Edit Alarm</Phrase>
     <Phrase key="lblChannel">Input Channel Number:</Phrase>
     <Phrase key="lblPath">Sound File:</Phrase>
     <Phrase key="btnOk">Ok</Phrase>

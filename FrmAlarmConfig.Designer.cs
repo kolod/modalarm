@@ -123,7 +123,7 @@ namespace Scada.Server.Modules.Alarm
             this.linkAuthor.Size = new System.Drawing.Size(241, 17);
             this.linkAuthor.TabIndex = 4;
             this.linkAuthor.TabStop = true;
-            this.linkAuthor.Text = "Александр Колодкин (с) 2017-2018";
+            this.linkAuthor.Text = "Александр Колодкин (с) 2017-2020";
             this.linkAuthor.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkAuthor_LinkClicked);
             // 
             // inputChannels
@@ -136,12 +136,14 @@ namespace Scada.Server.Modules.Alarm
             this.columnSoundFile});
             this.inputChannels.FullRowSelect = true;
             this.inputChannels.GridLines = true;
+            this.inputChannels.HideSelection = false;
             this.inputChannels.Location = new System.Drawing.Point(12, 56);
             this.inputChannels.Name = "inputChannels";
             this.inputChannels.Size = new System.Drawing.Size(586, 284);
             this.inputChannels.TabIndex = 5;
             this.inputChannels.UseCompatibleStateImageBehavior = false;
             this.inputChannels.View = System.Windows.Forms.View.Details;
+            this.inputChannels.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.inputChannels_MouseDoubleClick);
             // 
             // columnChannel
             // 

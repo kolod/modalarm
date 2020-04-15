@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2017-2018 Alexandr Kolodkin <alexandr.kolodkin@gmail.com>
+ * Copyright 2017-2020 Oleksandr Kolodkin <alexandr.kolodkin@gmail.com>
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,11 @@
  * 
  * Product  : Rapid SCADA
  * Module   : ModAlarm
- * Summary  : Config form
+ * Summary  : Module configuration
  * 
  * Author   : Alexandr Kolodkin
  * Created  : 2017
- * Modified : 2018
+ * Modified : 2020
  */
 
 using Scada.Client;
@@ -285,10 +285,34 @@ namespace Scada.Server.Modules.Alarm
             {
                 foreach (ListViewItem item in inputChannels.SelectedItems)
                 {
-                    config.channels.Remove(Convert.ToInt32(item.SubItems[0].Text));
+                    config.RemoveChannel(Convert.ToInt32(item.SubItems[0].Text));
                     inputChannels.Items.Remove(item);
-
                     Modified = true;
+                }
+            }
+        }
+
+        private void inputChannels_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            ListViewHitTestInfo info = inputChannels.HitTest(e.X, e.Y);
+            ListViewItem item = info.Item;
+
+            if (item != null)
+            {
+                FrmEditAlarm dialog = new FrmEditAlarm(appDirs);
+                int old_channel = Convert.ToInt32(item.SubItems[0].Text);
+                dialog.Channel = old_channel;
+                dialog.SoundFilePath = item.SubItems[1].Text;
+
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    if (config.UpdateChannel(old_channel, dialog.Channel, dialog.SoundFilePath))
+                    {
+                        lastPath = dialog.SoundFilePath;
+                        lastChannel = dialog.Channel;
+                        Modified = true;
+                        ConfigToControls();
+                    }
                 }
             }
         }

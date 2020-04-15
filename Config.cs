@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2017-2018 Alexandr Kolodkin
+ * Copyright 2017-2020 Oleksandr Kolodkin <alexandr.kolodkin@gmail.com>
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@
  * 
  * Author   : Alexandr Kolodkin
  * Created  : 2017
- * Modified : 2018
+ * Modified : 2020
  */
 
 using System;
@@ -95,6 +95,34 @@ namespace Scada.Server.Modules
             if (channels.ContainsKey(channel)) return false;
 
             channels.Add(channel, path);
+            return true;
+        }
+
+
+        /// <summary>
+        /// Изменить аварию
+        /// </summary>
+        public bool UpdateChannel(int old_channel, int new_channel, string path)
+        {
+            if (new_channel < 0) return false;
+            if (new_channel > 65535) return false;
+            if (path == "") return false;
+            if (!File.Exists(path)) return false;
+            if (!channels.ContainsKey(old_channel)) return false;
+
+            channels.Remove(old_channel);
+            channels.Add(new_channel, path);
+            return true;
+        }
+
+
+        /// <summary>
+        /// Удалить аварию
+        /// </summary>
+        public bool RemoveChannel(int channel)
+        {
+            if (!channels.ContainsKey(channel)) return false;
+            channels.Remove(channel);
             return true;
         }
 

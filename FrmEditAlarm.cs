@@ -39,7 +39,7 @@ using NAudio.Wave;
 
 namespace Scada.Server.Modules
 {
-    public partial class FrmAddAlarm : Form
+    public partial class FrmEditAlarm : Form
     {
         public string SoundFilePath;
         public int Channel;
@@ -48,7 +48,7 @@ namespace Scada.Server.Modules
         private WaveOut waveOut = null;
 
 
-        public FrmAddAlarm(AppDirs appDirs)
+        public FrmEditAlarm(AppDirs appDirs)
         {
             this.appDirs = appDirs;
             InitializeComponent();
@@ -92,7 +92,7 @@ namespace Scada.Server.Modules
             {
                 if (Localization.LoadDictionaries(appDirs.LangDir, "ModAlarm", out errMsg))
                 {
-                    Translator.TranslateForm(this, "Scada.Server.Modules.Alarm.FrmAddAlarm");
+                    Translator.TranslateForm(this, "Scada.Server.Modules.Alarm.FrmEditAlarm");
 
                     openFileDialog.Filter = Localization.Dictionaries["Scada.Server.Modules.Alarm.FrmAddAlarm"]
                         .GetPhrase("openFileDialog.Filter", openFileDialog.Filter);
@@ -136,11 +136,18 @@ namespace Scada.Server.Modules
 
         private void FrmAddAlarm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (waveOut != null)
+            try
             {
-                waveOut.Stop();
-                waveOut.Dispose();
-                waveOut = null;
+                if (waveOut != null)
+                    {
+                    waveOut.Stop();
+                    waveOut.Dispose();
+                    waveOut = null;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error");
             }
         }
 

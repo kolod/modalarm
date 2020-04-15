@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Scada.Server.Modules</RootNamespace>
     <AssemblyName>ModAlarm</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -35,22 +35,22 @@
     <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Log, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Users\alexa\OneDrive\Документы\Visual Studio 2017\Projects\scada\Log\bin\Release\Log.dll</HintPath>
+    <Reference Include="Log">
+      <HintPath>..\scada\ScadaServer\ScadaServer\ScadaServerCommon\bin\Release\Log.dll</HintPath>
     </Reference>
-    <Reference Include="NAudio">
+    <Reference Include="NAudio, Version=1.8.4.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>C:\Users\alexa\OneDrive\Документы\Visual Studio 2017\Projects\NAudio\NAudio\bin\Release\NAudio.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <Private>True</Private>
     </Reference>
     <Reference Include="ScadaCommCommon">
-      <HintPath>C:\Users\alexa\OneDrive\Документы\Visual Studio 2017\Projects\scada\ScadaComm\ScadaCommCommon\bin\Release\ScadaCommCommon.dll</HintPath>
+      <HintPath>..\scada\ScadaComm\ScadaComm\ScadaCommCommon\bin\Release\ScadaCommCommon.dll</HintPath>
     </Reference>
-    <Reference Include="ScadaData, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Users\alexa\OneDrive\Документы\Visual Studio 2017\Projects\scada\ScadaComm\ScadaCommCommon\bin\Release\ScadaData.dll</HintPath>
+    <Reference Include="ScadaData">
+      <HintPath>..\scada\ScadaServer\ScadaServer\ScadaServerCommon\bin\Release\ScadaData.dll</HintPath>
     </Reference>
     <Reference Include="ScadaServerCommon">
-      <HintPath>C:\Users\alexa\OneDrive\Документы\Visual Studio 2017\Projects\scada\ScadaServer\ScadaServerCommon\bin\Release\ScadaServerCommon.dll</HintPath>
+      <HintPath>..\scada\ScadaServer\ScadaServer\ScadaServerCommon\bin\Release\ScadaServerCommon.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -59,6 +59,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FrmEditAlarm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmEditAlarm.Designer.cs">
+      <DependentUpon>FrmEditAlarm.cs</DependentUpon>
+    </Compile>
     <Compile Include="FrmAddAlarm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -83,6 +89,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="FrmEditAlarm.resx">
+      <DependentUpon>FrmEditAlarm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FrmAddAlarm.resx">
       <DependentUpon>FrmAddAlarm.cs</DependentUpon>
     </EmbeddedResource>
@@ -100,8 +109,10 @@
     <None Include="README.ru.md" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Lang\ModAlarm.en-GB.xml" />
     <Content Include="ModAlarm.en-Gb.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Lang\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
