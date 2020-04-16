@@ -31,7 +31,6 @@ using System.Text;
 using System.Threading;
 using Utils;
 using NAudio.Wave;
-using System.Reflection;
 
 namespace Scada.Server.Modules
 {
@@ -58,17 +57,6 @@ namespace Scada.Server.Modules
         private Config config;            // конфигурация модуля
         private SortedDictionary<int, bool> lastState = new SortedDictionary<int, bool>();          // предыдущее состояние сигнала аварии
         private SortedDictionary<int, WaveOut> waveOuts = new SortedDictionary<int, WaveOut>();     //
-
-        AppDomain currentDomain = AppDomain.CurrentDomain;
-
-        static Assembly LoadFromSameFolder(object sender, ResolveEventArgs args)
-        {
-            string folderPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            string assemblyPath = Path.Combine(folderPath, new AssemblyName(args.Name).Name + ".dll");
-            if (!File.Exists(assemblyPath)) return null;
-            Assembly assembly = Assembly.LoadFrom(assemblyPath);
-            return assembly;
-        }
 
 
         /// <summary>
@@ -157,8 +145,6 @@ namespace Scada.Server.Modules
         /// </summary>
         public override void OnServerStart()
         {
-            currentDomain.AssemblyResolve += new ResolveEventHandler(LoadFromSameFolder);
-
             // определение полного имени файла информации
             infoFileName = AppDirs.LogDir + InfoFileName;
 
