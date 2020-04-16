@@ -17,7 +17,9 @@ Enable ModAlarm on the modules tab.
 
 ### Notes
 For the module to work, it is necessary to have at least one channel with the type "Calculated real" in the project.
+
 Please check that ModAlert.dll and NAudio.dll aren't locked.
+
 ![ModAlarm unlock screenshot](https://github.com/kolod/modalarm/raw/master/screenshot-unlock.png)
 
 ### Usage example:

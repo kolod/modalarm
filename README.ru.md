@@ -16,7 +16,9 @@
 
 ### Примечания
 Для работы модуля, необходимо наличие хотя бы одного канала с типом "Дорасчётный ТИ" в проекте.
+
 Пожалуйста, убедитесь, что ModAlert.dll и NAudio.dll не заблокированы.
+
 ![ModAlarm unlock screenshot](https://github.com/kolod/modalarm/raw/master/screenshot-unlock.ru.png)
 
 ### Пример использования:
