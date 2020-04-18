@@ -25,7 +25,7 @@
     <Phrase key="btnTest">Test</Phrase>
     <Phrase key="openFileDialog.Filter">Waveform Audio File (*.wav)|*.wav</Phrase>
   </Dictionary>
-  <Dictionary key="Scada.Server.Modules.Alarm.FrmAddAlarm">
+  <Dictionary key="Scada.Server.Modules.Alarm.FrmEditAlarm">
     <Phrase key="this">Edit Alarm</Phrase>
     <Phrase key="lblChannel">Input Channel Number:</Phrase>
     <Phrase key="lblPath">Sound File:</Phrase>

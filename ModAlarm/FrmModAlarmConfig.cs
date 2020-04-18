@@ -52,8 +52,8 @@ namespace Scada.Server.Modules.Alarm
         private int lastChannel = 0;     // последний добавленный канал
         private string lastPath = "";    // последний добавленный аудиофайл
 
-        private string msgAlreadyExists; // сообщение "Данный канал уже исползуется. Именить его?"
-        private string msgWarning;       // заголовок сообщения "Предупреждение"
+        private string msgAlreadyExists = "Данный канал уже исползуется. Изменить его?";   // сообщение "Данный канал уже исползуется. Именить его?"
+        private string msgWarning       = "Предупреждение";                                // заголовок сообщения "Предупреждение"
 
         AppDomain currentDomain = AppDomain.CurrentDomain;
 
@@ -174,13 +174,13 @@ namespace Scada.Server.Modules.Alarm
                         .GetPhrase("columnChannel", inputChannels.Columns[0].Text);
 
                     inputChannels.Columns[1].Text = Localization.Dictionaries["Scada.Server.Modules.Alarm.FrmAlarmConfig"]
-                        .GetPhrase("columnSoundFile", inputChannels.Columns[0].Text);
+                        .GetPhrase("columnSoundFile", inputChannels.Columns[1].Text);
 
                     msgAlreadyExists = Localization.Dictionaries["Scada.Server.Modules.Alarm.FrmAlarmConfig"]
-                        .GetPhrase("msgAlreadyExists", "Данный канал уже исползуется. Изменить его?");
+                        .GetPhrase("msgAlreadyExists", msgAlreadyExists);
 
                     msgWarning = Localization.Dictionaries["Scada.Server.Modules.Alarm.FrmAlarmConfig"]
-                        .GetPhrase("msgWarning", "Предупреждение");
+                        .GetPhrase("msgWarning", msgWarning);
                 }
                 else
                     ScadaUiUtils.ShowError(errMsg);
@@ -197,8 +197,8 @@ namespace Scada.Server.Modules.Alarm
             ConfigToControls();
 
             // последний добавленный канал
-            lastChannel = config.channels.Last().Key;
-            lastPath = config.channels.Last().Value;
+            lastChannel = config.channels.LastOrDefault().Key;
+            lastPath = config.channels.LastOrDefault().Value;
 
             // снятие признака изменения конфигурации
             Modified = false;
@@ -254,40 +254,37 @@ namespace Scada.Server.Modules.Alarm
         {
             if (!changing)
             {
-                FrmAddAlarm dialog = new FrmAddAlarm(appDirs);
-
+                FrmAlarm dialog = new FrmAlarm(appDirs);
+                dialog.isEdit = false;
                 dialog.SoundFilePath = lastPath;
-                dialog.Channel = lastChannel + 1;
-
-                while (true) // цикл, пока не получим условие для выхода
+                dialog.Channel = lastChannel;
+                if (config.channels.Count > 0) dialog.Channel += 1;
+                
+                if (dialog.ShowDialog() == DialogResult.OK)
                 {
-                    if (dialog.ShowDialog() == DialogResult.OK)
+                    if (config.channels.ContainsKey(dialog.Channel))
                     {
-                        if (config.channels.ContainsKey(dialog.Channel))
+                        switch (MessageBox.Show(msgAlreadyExists, msgWarning, MessageBoxButtons.YesNoCancel))
                         {
-                            switch (MessageBox.Show(msgAlreadyExists, msgWarning, MessageBoxButtons.YesNoCancel))
-                            {
-                                case DialogResult.No:
-                                    continue;
+                            case DialogResult.Yes:
+                                config.channels.Remove(dialog.Channel);
+                                break;
 
-                                case DialogResult.Cancel:
-                                    return;
+                            case DialogResult.No:
+                                break;
 
-                                case DialogResult.Yes:
-                                    config.channels.Remove(dialog.Channel);
-                                    break;
-                            }
+                            case DialogResult.Cancel:
+                                return;
                         }
+                    }
 
-                        if (config.AddChannel(dialog.Channel, dialog.SoundFilePath))
-                        {
-                            lastPath = dialog.SoundFilePath;
-                            lastChannel = dialog.Channel;
-                            Modified = true;
-                            ConfigToControls();
-                        }
-
-                        return;
+                    // Сохраняем новую аварию
+                    if (config.AddChannel(dialog.Channel, dialog.SoundFilePath))
+                    {
+                        lastPath     = dialog.SoundFilePath;
+                        lastChannel  = dialog.Channel;
+                        Modified     = true;
+                        ConfigToControls();
                     }
                 }
             }
@@ -313,10 +310,11 @@ namespace Scada.Server.Modules.Alarm
 
             if (item != null)
             {
-                FrmEditAlarm dialog = new FrmEditAlarm(appDirs);
+                FrmAlarm dialog = new FrmAlarm(appDirs);
                 int old_channel = Convert.ToInt32(item.SubItems[0].Text);
                 dialog.Channel = old_channel;
                 dialog.SoundFilePath = item.SubItems[1].Text;
+                dialog.isEdit = true;
 
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {

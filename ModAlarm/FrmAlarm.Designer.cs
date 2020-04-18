@@ -25,7 +25,7 @@
 
 namespace Scada.Server.Modules
 {
-    partial class FrmEditAlarm
+    partial class FrmAlarm
     {
         /// <summary>
         /// Required designer variable.
@@ -161,7 +161,7 @@ namespace Scada.Server.Modules
             this.btnTest.UseVisualStyleBackColor = true;
             this.btnTest.CheckedChanged += new System.EventHandler(this.btnTest_CheckedChanged);
             // 
-            // FrmEditAlarm
+            // FrmAddAlarm
             // 
             this.AcceptButton = this.btnOk;
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -179,11 +179,11 @@ namespace Scada.Server.Modules
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(500, 240);
-            this.Name = "FrmEditAlarm";
+            this.Name = "FrmAddAlarm";
             this.ShowIcon = false;
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Изменить аварию";
+            this.Text = "Добавить аварию";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmAddAlarm_FormClosing);
             this.Load += new System.EventHandler(this.FrmAddAlarm_Load);
             this.Shown += new System.EventHandler(this.FrmAddAlarm_Shown);

@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ModAlarm>
+  <Alarm>
+    <Sound>C:\SCADA\ScadaTools\alarm.wav</Sound>
+    <Channel>65007</Channel>
+  </Alarm>
+</ModAlarm>

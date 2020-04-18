@@ -39,16 +39,22 @@ using NAudio.Wave;
 
 namespace Scada.Server.Modules
 {
-    public partial class FrmEditAlarm : Form
+    public partial class FrmAlarm : Form
     {
         public string SoundFilePath;
         public int Channel;
+        public bool isEdit = false;
 
         private AppDirs appDirs;         // директории приложения
         private WaveOut waveOut = null;
 
+        private string localization()
+        {
+            return isEdit ? "Scada.Server.Modules.Alarm.FrmEditAlarm" : "Scada.Server.Modules.Alarm.FrmAddAlarm";
+        }
 
-        public FrmEditAlarm(AppDirs appDirs)
+
+        public FrmAlarm(AppDirs appDirs)
         {
             this.appDirs = appDirs;
             InitializeComponent();
@@ -92,9 +98,9 @@ namespace Scada.Server.Modules
             {
                 if (Localization.LoadDictionaries(appDirs.LangDir, "ModAlarm", out errMsg))
                 {
-                    Translator.TranslateForm(this, "Scada.Server.Modules.Alarm.FrmEditAlarm");
+                    Translator.TranslateForm(this, localization());
 
-                    openFileDialog.Filter = Localization.Dictionaries["Scada.Server.Modules.Alarm.FrmAddAlarm"]
+                    openFileDialog.Filter = Localization.Dictionaries[localization()]
                         .GetPhrase("openFileDialog.Filter", openFileDialog.Filter);
                 }
                 else
@@ -136,18 +142,11 @@ namespace Scada.Server.Modules
 
         private void FrmAddAlarm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            try
+            if (waveOut != null)
             {
-                if (waveOut != null)
-                    {
-                    waveOut.Stop();
-                    waveOut.Dispose();
-                    waveOut = null;
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Error");
+                waveOut.Stop();
+                waveOut.Dispose();
+                waveOut = null;
             }
         }
 
