@@ -105,6 +105,10 @@ namespace Scada.Server.Modules
                 }
                 else
                     ScadaUiUtils.ShowError(errMsg);
+            } 
+            else if (isEdit)
+            {
+                Text = "Изменить аварию";
             }
         }
 

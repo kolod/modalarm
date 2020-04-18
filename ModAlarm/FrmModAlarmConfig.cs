@@ -255,7 +255,7 @@ namespace Scada.Server.Modules.Alarm
             if (!changing)
             {
                 FrmAlarm dialog = new FrmAlarm(appDirs);
-                dialog.isEdit = false;
+                dialog.isEdit = false; 
                 dialog.SoundFilePath = lastPath;
                 dialog.Channel = lastChannel;
                 if (config.channels.Count > 0) dialog.Channel += 1;
