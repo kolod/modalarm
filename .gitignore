@@ -199,3 +199,5 @@ FakesAssemblies/
 
 # Unignore the configuration database files
 !Base/data/*.sdf
+/ScadaServer
+/*.zip
