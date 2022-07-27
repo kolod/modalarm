@@ -1,4 +1,6 @@
-﻿# ModAlarm
+[![Stand With Ukraine](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/banner2-direct.svg)](https://vshymanskyy.github.io/StandWithUkraine/)
+
+# ModAlarm
 Server module for the [Rapid SCADA](https://rapidscada.org/).  
 Allows you to output the alarm sound.
 
